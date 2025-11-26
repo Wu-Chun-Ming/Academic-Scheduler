@@ -15,11 +15,16 @@ import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.exception.ScheduleNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;
 import io.github.wcm.schedulemanager.repository.ScheduleRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class ScheduleService {
+	@PersistenceContext
+	EntityManager entityManager;
+
 	private final CourseRepository courseRepository;
 	private final ScheduleRepository scheduleRepository;
 
@@ -30,7 +35,11 @@ public class ScheduleService {
 	}
 
 	public List<Schedule> getAllSchedules() {
-		return scheduleRepository.findAll();
+		List<Schedule> schedules = entityManager.createQuery(
+			    "SELECT s FROM Schedule s JOIN FETCH s.course", Schedule.class
+			).getResultList();
+
+		return schedules;
 	}
 
 	public Schedule getScheduleById(int id) {
