@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import io.github.wcm.schedulemanager.domain.Course;
+import io.github.wcm.schedulemanager.domain.Detail;
 import io.github.wcm.schedulemanager.domain.Schedule;
 import io.github.wcm.schedulemanager.domain.ScheduleType;
 import io.github.wcm.schedulemanager.domain.Scope;
@@ -70,7 +71,8 @@ public class ScheduleService {
 		schedule.setEndDate(dto.getEndDate());
 		schedule.setStartTime(dto.getStartTime());
 		schedule.setEndTime(dto.getEndTime());
-		schedule.setDetail(dto.getDetail());
+		Detail detail = new Detail(dto.getDescription(), dto.getVenue());
+		schedule.setDetail(detail);
 
 		try {
 			schedule.setType(ScheduleType.valueOf(dto.getType().toUpperCase()));

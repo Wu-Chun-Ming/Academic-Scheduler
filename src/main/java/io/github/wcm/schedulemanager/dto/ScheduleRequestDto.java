@@ -24,8 +24,10 @@ public class ScheduleRequestDto {
 	@NotBlank(message = "Type is required")
 	private String type;
 
-	@NotBlank(message = "Detail is required")
-	private String detail;
+	@NotBlank(message = "Description is required")
+	private String description;
+
+	private String venue;
 
 	@NotBlank(message = "Status is required")
 	private String status;

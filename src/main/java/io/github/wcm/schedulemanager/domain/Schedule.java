@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import io.github.wcm.schedulemanager.dto.ScheduleRequestDto;
 import jakarta.persistence.Column;
@@ -52,8 +54,9 @@ public class Schedule {
 	@Enumerated(EnumType.STRING)
 	private ScheduleType type;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "json", nullable = false)
-	private String detail;
+	private Detail detail;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -77,7 +80,7 @@ public class Schedule {
 			throw new IllegalArgumentException("Invalid schedule type: " + dto.getType());
 		}
 
-		this.detail = dto.getDetail();
+		this.detail = new Detail(dto.getDescription(), dto.getVenue());
 
 		try {
 			this.status = Status.valueOf(dto.getStatus().toUpperCase());

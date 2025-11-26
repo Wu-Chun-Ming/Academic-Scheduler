@@ -3,6 +3,7 @@ package io.github.wcm.schedulemanager.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import io.github.wcm.schedulemanager.domain.Detail;
 import io.github.wcm.schedulemanager.domain.Schedule;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class ScheduleResponseDto {
 	private String coursecode;
 	private String coursename;
 	private String type;
-	private String detail;
+	private Detail detail;
 	private String status;
 	private String scope;
 
