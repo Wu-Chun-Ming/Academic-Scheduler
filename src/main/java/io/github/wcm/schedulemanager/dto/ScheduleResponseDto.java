@@ -3,23 +3,25 @@ package io.github.wcm.schedulemanager.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import io.github.wcm.schedulemanager.domain.Detail;
 import io.github.wcm.schedulemanager.domain.Schedule;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ScheduleResponseDto {
 	private int id;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private String coursecode;
-	private String coursename;
+	private String courseCode;
+	private String courseName;
 	private String type;
-	private Detail detail;
+	private String description;
+	private String venue;
 	private String status;
 	private String scope;
 
@@ -29,10 +31,11 @@ public class ScheduleResponseDto {
 		this.endDate = schedule.getEndDate();
 		this.startTime = schedule.getStartTime();
 		this.endTime = schedule.getEndTime();
-		this.coursecode = schedule.getCourse().getCode();
-		this.coursename = schedule.getCourse().getName();
+		this.courseCode = schedule.getCourse().getCode();
+		this.courseName = schedule.getCourse().getName();
 		this.type = schedule.getType().name();
-		this.detail = schedule.getDetail();
+		this.description = schedule.getDetail().getDescription();
+		this.venue = schedule.getDetail().getVenue();
 		this.status = schedule.getStatus().name();
 		this.scope = schedule.getScope().name();
 	}

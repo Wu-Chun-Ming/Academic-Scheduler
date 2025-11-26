@@ -2,10 +2,12 @@ package io.github.wcm.schedulemanager.dto;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CourseResponseDto {
 	private String code;
 	private String name;
