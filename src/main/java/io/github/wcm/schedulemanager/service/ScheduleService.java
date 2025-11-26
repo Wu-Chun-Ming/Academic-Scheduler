@@ -17,10 +17,8 @@ import io.github.wcm.schedulemanager.repository.CourseRepository;
 import io.github.wcm.schedulemanager.repository.ScheduleRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class ScheduleService {
 	@PersistenceContext
 	EntityManager entityManager;
@@ -99,7 +97,7 @@ public class ScheduleService {
 			throw new IllegalArgumentException("Invalid scope: " + dto.getScope());
 		}
 
-		return schedule;
+		return scheduleRepository.save(schedule);
 	}
 
 	public void deleteSchedule(int id) {

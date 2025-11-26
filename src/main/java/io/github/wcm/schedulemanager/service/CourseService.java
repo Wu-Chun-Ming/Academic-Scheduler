@@ -9,10 +9,8 @@ import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;
-import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class CourseService {
 	private final CourseRepository courseRepository;
 
@@ -52,7 +50,7 @@ public class CourseService {
 			throw new IllegalArgumentException("Invalid programme type: " + dto.getProgrammeType());
 		}
 
-		return course;
+		return courseRepository.save(course);
 	}
 
 	public void deleteCourse(String code) {
