@@ -32,13 +32,19 @@ public class CourseController {
 	}
 
 	@GetMapping("/courses")
-	public List<Course> getAllCourses() {
-		return courseService.getAllCourses();
+	public ResponseEntity<List<CourseResponseDto>> getAllCourses() {
+		List<Course> courses = courseService.getAllCourses();
+		List<CourseResponseDto> response = courses.stream().map(CourseResponseDto::new).toList();
+
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/course/{code}")
-	public Course getCourseById(@PathVariable String code) {
-		return courseService.getCourseByCode(code);
+	public ResponseEntity<CourseResponseDto> getCourseById(@PathVariable String code) {
+		Course course = courseService.getCourseByCode(code);
+		CourseResponseDto response = new CourseResponseDto(course);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/course/{code}")

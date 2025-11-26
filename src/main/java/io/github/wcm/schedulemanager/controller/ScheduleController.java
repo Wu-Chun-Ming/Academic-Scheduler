@@ -32,13 +32,19 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/schedules")
-	public List<Schedule> getAllSchedules() {
-		return scheduleService.getAllSchedules();
+	public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules() {
+		List<Schedule> schedules = scheduleService.getAllSchedules();
+		List<ScheduleResponseDto> response = schedules.stream().map(ScheduleResponseDto::new).toList();
+
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/schedule/{id}")
-	public Schedule getScheduleById(@PathVariable int id) {
-		return scheduleService.getScheduleById(id);
+	public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable int id) {
+		Schedule schedule = scheduleService.getScheduleById(id);
+		ScheduleResponseDto response = new ScheduleResponseDto(schedule);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/schedule/{id}")
