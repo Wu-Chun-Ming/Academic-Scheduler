@@ -23,7 +23,7 @@ public class ScheduleRequestDto {
 
 	@NotBlank(message = "Course code is required")
 	@Size(min = 7, max = 8, message = "Course code must be 7-8 characters")
-	private String coursecode;
+	private String courseCode;
 
 	@NotBlank(message = "Type is required")
 	private String type;

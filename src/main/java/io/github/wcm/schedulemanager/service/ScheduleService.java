@@ -46,8 +46,8 @@ public class ScheduleService {
 
 	public Schedule createSchedule(ScheduleRequestDto dto) {
 		// Load course entity
-		Course course = courseRepository.findByCode(dto.getCoursecode())
-				.orElseThrow(() -> new CourseNotFoundException(dto.getCoursecode()));
+		Course course = courseRepository.findByCode(dto.getCourseCode())
+				.orElseThrow(() -> new CourseNotFoundException(dto.getCourseCode()));
 
 		// Create entity
 		Schedule schedule = new Schedule(dto, course);
@@ -61,8 +61,8 @@ public class ScheduleService {
 				.orElseThrow(() -> new ScheduleNotFoundException(id));
 
 		// Load course entity
-		Course course = courseRepository.findByCode(dto.getCoursecode())
-				.orElseThrow(() -> new CourseNotFoundException(dto.getCoursecode()));
+		Course course = courseRepository.findByCode(dto.getCourseCode())
+				.orElseThrow(() -> new CourseNotFoundException(dto.getCourseCode()));
 
 		// Validations
 		if (dto.getStartDate().isAfter(dto.getEndDate())) {
