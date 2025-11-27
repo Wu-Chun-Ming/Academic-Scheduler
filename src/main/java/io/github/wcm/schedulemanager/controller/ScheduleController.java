@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/schedules")
 public class ScheduleController {
 	@Autowired
 	private ScheduleService scheduleService;
@@ -31,7 +31,7 @@ public class ScheduleController {
 		this.scheduleService = scheduleService;
 	}
 
-	@GetMapping("/schedules")
+	@GetMapping
 	public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules() {
 		List<Schedule> schedules = scheduleService.getAllSchedules();
 		List<ScheduleResponseDto> response = schedules.stream().map(ScheduleResponseDto::new).toList();
@@ -39,7 +39,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/schedule/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable int id) {
 		Schedule schedule = scheduleService.getScheduleById(id);
 		ScheduleResponseDto response = new ScheduleResponseDto(schedule);
@@ -47,7 +47,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/schedule/{id}")
+	@PostMapping
 	public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto dto) {
 		Schedule schedule = scheduleService.createSchedule(dto);
 		ScheduleResponseDto response = new ScheduleResponseDto(schedule);
@@ -55,7 +55,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PutMapping("/schedule/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<ScheduleResponseDto> updateSchedule(@Valid @RequestBody ScheduleRequestDto dto, @PathVariable int id) {
 		Schedule schedule = scheduleService.updateSchedule(dto, id);
 		ScheduleResponseDto response = new ScheduleResponseDto(schedule);
@@ -63,7 +63,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping("/schedule/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteSchedule(@PathVariable int id) {
 		scheduleService.deleteSchedule(id);
 		return ResponseEntity.noContent().build();

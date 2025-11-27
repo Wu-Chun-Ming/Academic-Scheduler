@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/courses")
 public class CourseController {
 	@Autowired
 	private CourseService courseService;
@@ -31,7 +31,7 @@ public class CourseController {
 		this.courseService = courseService;
 	}
 
-	@GetMapping("/courses")
+	@GetMapping
 	public ResponseEntity<List<CourseResponseDto>> getAllCourses() {
 		List<Course> courses = courseService.getAllCourses();
 		List<CourseResponseDto> response = courses.stream().map(CourseResponseDto::new).toList();
@@ -39,7 +39,7 @@ public class CourseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/course/{code}")
+	@GetMapping("/{code}")
 	public ResponseEntity<CourseResponseDto> getCourseById(@PathVariable String code) {
 		Course course = courseService.getCourseByCode(code);
 		CourseResponseDto response = new CourseResponseDto(course);
@@ -47,7 +47,7 @@ public class CourseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/course/{code}")
+	@PostMapping
 	public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseRequestDto dto) {
 		Course course = courseService.createCourse(dto);
 		CourseResponseDto response = new CourseResponseDto(course);
@@ -55,7 +55,7 @@ public class CourseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PutMapping("/course/{code}")
+	@PutMapping("/{code}")
 	public ResponseEntity<CourseResponseDto> updateCourse(@Valid @RequestBody CourseRequestDto dto, @PathVariable String code) {
 		Course course = courseService.updateCourse(dto, code);
 		CourseResponseDto response = new CourseResponseDto(course);
@@ -63,7 +63,7 @@ public class CourseController {
 		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping("/course/{code}")
+	@DeleteMapping("/{code}")
 	public ResponseEntity<Void> deleteCourse(@PathVariable String code) {
 		courseService.deleteCourse(code);
 		return ResponseEntity.noContent().build();
