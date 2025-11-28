@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="scheduleForm(courses, types, scopes, actionUrl)"
+	th:with="method=${method} ?: 'POST', 
+			isEdit=${isEdit} ?: false, 
+			enableDelete=${enableDelete} ?: false">
+	<!-- Success Message -->
+	<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
+	    <span th:text="${successMessage}"></span>
+	    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+	<form class="form" th:object="${schedule}" th:action="${actionUrl}" th:method="POST" th:csrf="true">
+		<input type="hidden" name="_method" th:if="${method != 'POST'}" th:value="${method}">
+
+		<!-- Error Messages -->
+		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+			<ul>
+				<li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<!-- Start Time -->
+		<div class="mb-3">
+			<label for="startDateTime" class="form-label fw-bold">Start Time *</label>
+			<input type="datetime-local" class="form-control" th:field="*{startDateTime}" onfocus="this.showPicker()" required>
+		</div>
+
+		<!-- End Time -->
+		<div class="mb-3">
+			<label for="endDateTime" class="form-label fw-bold">End Time</label>
+			<input type="datetime-local" class="form-control" th:field="*{endDateTime}" onfocus="this.showPicker()">
+		</div>
+
+		<!-- Course Code -->
+		<div class="mb-3">
+			<label for="courseCode" class="form-label fw-bold">Course Code *</label>
+			<select class="form-select" id="courseCode" name="courseCode" required>
+				<option value="" selected disabled>Select Course</option>
+				<option th:each="course : ${courses}" 
+						th:value="${course.code}" 
+						th:text="${course.code + '&emsp;' + course.name}"
+						></option>
+			</select>
+		</div>
+
+		<!-- Type -->
+		<div class="mb-3">
+			<label for="type" class="form-label fw-bold">Type *</label>
+			<select class="form-select" id="type" name="type" required>
+				<option value="" selected disabled>Select Type</option>
+				<option th:each="type : ${types}" 
+						th:value="${type.value}" 
+						th:text="${type.label}">
+				</option>
+			</select>
+		</div>
+
+		<!-- Venue -->
+		<div class="mb-3">
+			<label for="venue" class="form-label fw-bold">Venue</label><br>
+			<input type="text" class="form-control" th:field="*{venue}" list="common-venue" autocomplete="off">
+			<datalist id="common-venue">
+				<option value="TBC">
+				<option value="KB">
+				<option value="KA">
+				<option value="ONLINE">
+			</datalist>
+		</div>
+
+		<!-- Description -->
+		<div class="mb-3">
+			<label for="description" class="form-label fw-bold">Description</label>
+			<input class="form-control" th:field="*{description}" list="common-description" autocomplete="off">
+			<datalist id="common-description">
+				<option value="Group Assignment">
+				<option value="Due Date">
+				<option value="No Class">
+				<option value="Test">
+				<option value="MTT">
+				<option value="PA">
+				<option value="Presentation">
+				<option value="RC">
+				<option value="Venue Changed">
+				<option value="Postponed">
+			</datalist>
+		</div>
+
+		<!-- Scope -->
+		<div class="mb-3">
+			<label for="scope" class="form-label fw-bold">Scope:</label><br>
+			<select class="form-select" th:field="*{scope}" required>
+				<option th:each="scope : ${scopes}" 
+						th:value="${scope.value ?: 'official'}" 
+						th:text="${scope.label}">
+				</option>
+			</select>
+		</div>
+
+		<!-- Status -->
+		<div class="mb-3" th:attr="hidden=${!( 
+			(schedule?.type == 'ASGMT' or schedule?.type == 'SP') and schedule?.status == 'PENDING'
+		) }">
+			<label for="status" class="form-label fw-bold">Status:</label><br>
+			<select class="form-select" th:field="*{status}" required>
+				<option value="pending">Pending</option>
+				<option value="submitted">Submitted</option>
+			</select>
+		</div>
+
+		<div class="d-flex">
+			<!-- Submit Button -->
+			<div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+			<!-- Reset Button -->
+			<div class="ms-2">
+				<button type="reset" class="btn btn-secondary">Reset</button>
+			</div>
+			
+			<!-- Delete Button -->
+			<div class="ms-auto" th:if="${enableDelete}">
+				<button type="button" class="btn btn-danger" onclick="if(confirm('Delete this schedule permanently?')) document.getElementById('deleteForm').submit();">
+					Delete
+				</button>
+			</div>
+		</div>
+	</form>
+	
+	<form id="deleteForm"
+		method="POST"
+		style="display: none;"
+		th:action="@{/schedule/{id}(id=${id})}"
+		th:if="${enableDelete}">
+	    <input type="hidden" name="_method" value="DELETE">
+	</form>
+</div>
+
+</html>

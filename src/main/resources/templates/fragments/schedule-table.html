@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="scheduleTable(schedules)" 
+	th:with="isTimeLeftVisible=${isTimeLeftVisible} ?: false">
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr class="text-center align-middle">
+				<th colspan="2" width="160px">Date</th>
+				<th>Day</th>
+				<th>Course Code</th>
+				<th colspan="2" width="160px">Time</th>
+				<th>Type</th>
+				<th>Details</th>
+				<th th:if="${isTimeLeftVisible}">Time Left</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-center align-middle"
+				th:each="schedule : ${schedules}">
+				<!-- Date -->
+				<td th:if="${schedule.startDate == schedule.endDate}" colspan="2"
+					th:text="${schedule.startDate}"></td>
+				<td th:if="${schedule.startDate != schedule.endDate}"
+					th:text="${schedule.startDate}"></td>
+				<td th:if="${schedule.startDate != schedule.endDate}"
+					th:text="${schedule.endDate}"></td>
+
+				<!-- Day -->
+				<td th:text="${#strings.capitalizeWords(#strings.toLowerCase(schedule.day))}"></td>
+
+				<!-- Course Code -->
+				<td th:text="${schedule.courseCode}"></td>
+
+				<!-- Time -->
+				<td th:if="${schedule.startTime == schedule.endTime}" 
+					th:text="${schedule.startTime}" colspan="2"></td>
+				<td th:if="${schedule.startTime != schedule.endTime}"
+					th:text="${schedule.startTime}"></td>
+				<td th:if="${schedule.startTime != schedule.endTime}"
+					th:text="${schedule.endTime}"></td>
+
+				<!-- Type -->
+				<td th:text="${schedule.type}"></td>
+
+				<!-- Details -->
+				<td>
+					<span th:text="${schedule.description}"></span> 
+					<span th:if="${schedule.venue != null}"
+						th:text="'[' + ${schedule.venue} + ']'"> </span>
+				</td>
+
+				<!-- Time Left -->
+				<td th:if="${isTimeLeftVisible}" 
+					th:text="${schedule.timeLeft}"></td>
+
+				<!-- Action -->
+				<td>
+					<a class="btn btn-secondary" th:href="@{/schedule/{id}/edit(id=${schedule.id})}">Edit</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</html>
