@@ -1,5 +1,6 @@
 package io.github.wcm.schedulemanager.dto;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,6 +21,7 @@ public class ScheduleResponseDto {
 	private LocalDateTime startDateTime;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDateTime endDateTime;
+	private DayOfWeek day;
 	private String courseCode;
 	private String courseName;
 	private String type;
@@ -27,6 +29,7 @@ public class ScheduleResponseDto {
 	private String venue;
 	private String status;
 	private String scope;
+	private String timeLeft;
 
 	public ScheduleResponseDto(Schedule schedule) {
 		this.id = schedule.getId();
@@ -36,6 +39,7 @@ public class ScheduleResponseDto {
 	    if (schedule.getEndDate() != null && schedule.getEndTime() != null) {
 	        this.endDateTime = LocalDateTime.of(schedule.getEndDate(), schedule.getEndTime());
 	    }
+		this.day = schedule.getStartDate().getDayOfWeek();
 		this.courseCode = schedule.getCourse().getCode();
 		this.courseName = schedule.getCourse().getName();
 		this.type = schedule.getType().name();
@@ -43,6 +47,7 @@ public class ScheduleResponseDto {
 		this.venue = schedule.getDetail().getVenue();
 		this.status = schedule.getStatus().name();
 		this.scope = schedule.getScope().name();
+		this.timeLeft = schedule.calculateTimeLeft();
 	}
 
 	public LocalDate getStartDate() {

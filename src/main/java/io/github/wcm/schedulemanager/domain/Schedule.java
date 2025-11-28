@@ -2,6 +2,7 @@ package io.github.wcm.schedulemanager.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -93,5 +94,41 @@ public class Schedule {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid scope: " + dto.getScope());
         }
+	}
+
+	// Calculate time left
+	public String calculateTimeLeft() {
+		LocalDate today = LocalDate.now();
+		LocalTime now = LocalTime.now();
+
+		// If the schedule has ended
+		if (today.isAfter(endDate)) {
+			return "Ended";
+		}
+		// If the schedule is ongoing
+		else if (today.isAfter(startDate)) {
+			return "Ongoing";
+		}
+		// If the schedule is yet to start but starts today
+		else if (today.isEqual(startDate)) {
+			long hoursLeft = ChronoUnit.HOURS.between(now, startTime);
+			long minutesLeft = ChronoUnit.MINUTES.between(now, startTime);
+
+			if (now.isAfter(endTime)) {
+				return "Ended";
+			}
+			else if (now.isAfter(startTime)) {
+				return "Ongoing";
+			}
+			else {
+				return (hoursLeft > 0 ? hoursLeft + " hours" : "") + (hoursLeft <= 0 ? minutesLeft + " minutes" : "");
+			}
+		}
+		// If the schedule is yet to start and starts in future
+		else {
+			long daysLeft = ChronoUnit.DAYS.between(today, startDate);
+			long hoursLeft = ChronoUnit.HOURS.between(now, startTime);
+			return (daysLeft > 0 ? daysLeft + " days " : "") + (hoursLeft > 0 ? hoursLeft + " hours" : "");
+		}
 	}
 }
