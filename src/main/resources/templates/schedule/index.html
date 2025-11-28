@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{layout.html}">
+<section layout:fragment="content">
+    <h1 class="py-2" th:text="'Upcoming Schedule'"></h1>
+
+	<!-- Success Message -->
+	<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
+	    <span th:text="${successMessage}"></span>
+	    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+    <a class="btn btn-primary mb-3" th:href="@{/schedule/create}">Create New Schedule</a>
+    <a class="btn btn-secondary mb-3" th:href="@{/schedule/manage}">Manage</a>
+
+    <!-- Schedule Table -->
+    <div th:replace="~{fragments/schedule-table :: scheduleTable(
+    	schedules=${schedules}, 
+    	isTimeLeftVisible=true
+    )}"></div>
+</section>
+</html>

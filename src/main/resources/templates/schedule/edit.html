@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{layout.html}">
+<section layout:fragment="content">
+	<a class="btn btn-secondary my-2" th:href="${previousUrl ?: '/schedule'}" th:text="'Back'"></a>
+	<h1 class="py-2" th:text="'Edit Schedule'"></h1>
+
+	<!-- Expired Notice -->
+	<b style='color: #FF0000;' th:if="${schedule.status == 'EXPIRED'}">
+		<i th:text="'(Note: This schedule is expired)'"></i>
+	</b>
+
+	<!-- Schedule Form -->
+    <div th:replace="~{fragments/schedule-form :: scheduleForm(
+        method='PUT',
+        actionUrl=@{/schedule/{id}(id=${id})},
+		isEdit=${true},
+		enableDelete=${true},
+		courses=${courses},
+		types=${types},
+		scopes=${scopes},
+	)}"></div>
+</section>
+</html>

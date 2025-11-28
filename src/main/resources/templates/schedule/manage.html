@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{layout.html}">
+<section layout:fragment="content">
+	<a class="btn btn-secondary my-2" th:href="@{/schedule}">Back</a>
+	<h1 class="py-2" th:text="'Schedules Listing'"></h1>
+
+	<!-- Schedule Table -->
+    <div th:replace="~{fragments/schedule-table :: scheduleTable(
+    	schedules=${schedules}
+    )}"></div>
+</section>
+</html>
