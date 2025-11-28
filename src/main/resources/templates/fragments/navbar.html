@@ -1,0 +1,32 @@
+<nav xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	th:fragment="navbar" 
+	class="navbar navbar-expand-lg bg-light border" data-bs-theme="light">
+	<div class="container-fluid">
+		<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarColor" aria-controls="navbarColor" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${activePage == 'home' ? 'active' : ''}" th:href="@{/}" th:attr="aria-current=${activePage == 'home' ? 'page' : null}">
+						Home
+						<span class="visually-hidden" th:if="${activePage == 'home'}">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${activePage == 'schedule' ? 'active' : ''}" th:href="@{/schedule}" th:attr="aria-current=${activePage == 'schedule' ? 'page' : null}">
+						Schedule
+						<span class="visually-hidden" th:if="${activePage == 'schedule'}">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${activePage == 'course' ? 'active' : ''}" th:href="@{/course}" th:attr="aria-current=${activePage == 'course' ? 'page' : null}">
+						Course
+						<span class="visually-hidden" th:if="${activePage == 'course'}">(current)</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
