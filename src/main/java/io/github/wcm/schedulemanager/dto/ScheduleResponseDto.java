@@ -1,7 +1,10 @@
 package io.github.wcm.schedulemanager.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import io.github.wcm.schedulemanager.domain.Schedule;
 import lombok.Getter;
@@ -13,10 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ScheduleResponseDto {
 	private int id;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime startDateTime;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime endDateTime;
 	private String courseCode;
 	private String courseName;
 	private String type;
@@ -27,10 +30,12 @@ public class ScheduleResponseDto {
 
 	public ScheduleResponseDto(Schedule schedule) {
 		this.id = schedule.getId();
-		this.startDate = schedule.getStartDate();
-		this.endDate = schedule.getEndDate();
-		this.startTime = schedule.getStartTime();
-		this.endTime = schedule.getEndTime();
+		if (schedule.getStartDate() != null && schedule.getStartTime() != null) {
+	        this.startDateTime = LocalDateTime.of(schedule.getStartDate(), schedule.getStartTime());
+	    }
+	    if (schedule.getEndDate() != null && schedule.getEndTime() != null) {
+	        this.endDateTime = LocalDateTime.of(schedule.getEndDate(), schedule.getEndTime());
+	    }
 		this.courseCode = schedule.getCourse().getCode();
 		this.courseName = schedule.getCourse().getName();
 		this.type = schedule.getType().name();
@@ -38,5 +43,21 @@ public class ScheduleResponseDto {
 		this.venue = schedule.getDetail().getVenue();
 		this.status = schedule.getStatus().name();
 		this.scope = schedule.getScope().name();
+	}
+
+	public LocalDate getStartDate() {
+		return startDateTime.toLocalDate();
+	}
+
+	public LocalDate getEndDate() {
+		return endDateTime.toLocalDate();
+	}
+
+	public LocalTime getStartTime() {
+		return startDateTime.toLocalTime();
+	}
+
+	public LocalTime getEndTime() {
+		return endDateTime.toLocalTime();
 	}
 }
