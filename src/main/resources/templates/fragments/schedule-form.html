@@ -40,7 +40,7 @@
 				<option th:each="course : ${courses}" 
 						th:value="${course.code}" 
 						th:text="${course.code + '&emsp;' + course.name}"
-						></option>
+						th:selected="${course.code == schedule.courseCode}">
 			</select>
 		</div>
 
@@ -51,7 +51,8 @@
 				<option value="" selected disabled>Select Type</option>
 				<option th:each="type : ${types}" 
 						th:value="${type.value}" 
-						th:text="${type.label}">
+						th:text="${type.label}"
+						th:selected="${type.value == schedule.type}">
 				</option>
 			</select>
 		</div>
