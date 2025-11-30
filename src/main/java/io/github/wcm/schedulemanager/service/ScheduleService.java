@@ -3,6 +3,7 @@ package io.github.wcm.schedulemanager.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Detail;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Service
+@Transactional
 public class ScheduleService {
 	@PersistenceContext
 	EntityManager entityManager;
@@ -32,6 +34,7 @@ public class ScheduleService {
 		this.scheduleRepository = scheduleRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Schedule> getAllSchedules() {
 		List<Schedule> schedules = entityManager.createQuery(
 			    "SELECT s FROM Schedule s JOIN FETCH s.course", Schedule.class
@@ -40,6 +43,7 @@ public class ScheduleService {
 		return schedules;
 	}
 
+	@Transactional(readOnly = true)
 	public Schedule getScheduleById(int id) {
 		return scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
 	}

@@ -3,6 +3,7 @@ package io.github.wcm.schedulemanager.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.ProgrammeType;
@@ -11,6 +12,7 @@ import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;
 
 @Service
+@Transactional
 public class CourseService {
 	private final CourseRepository courseRepository;
 
@@ -18,10 +20,12 @@ public class CourseService {
 		this.courseRepository = courseRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Course> getAllCourses() {
 		return courseRepository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Course getCourseByCode(String code) {
 		return courseRepository.findByCode(code).orElseThrow(() -> new CourseNotFoundException(code));
 	}
