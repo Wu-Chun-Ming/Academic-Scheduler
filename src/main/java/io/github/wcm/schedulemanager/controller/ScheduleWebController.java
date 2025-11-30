@@ -61,21 +61,21 @@ public class ScheduleWebController {
 		}
 
 		// Add types to model
-		List<Option> types = List.of(
-			new Option("L", "Lecture"),
-			new Option("T", "Tutorial"),
-			new Option("P", "Practical"),
-			new Option("ASGMT", "Assignment"),
-			new Option("ASMT", "Assessment"),
-			new Option("FE", "Final Examination"),
-			new Option("SP", "Special")
+		List<Option<String>> types = List.of(
+			new Option<>("L", "Lecture"),
+			new Option<>("T", "Tutorial"),
+			new Option<>("P", "Practical"),
+			new Option<>("ASGMT", "Assignment"),
+			new Option<>("ASMT", "Assessment (Test, Quiz)"),
+			new Option<>("FE", "Final Examination"),
+			new Option<>("SP", "Special")
 		);
 		model.addAttribute("types", types);
 
 		// Add scopes to model
-		List<Option> scopes = List.of(
-			new Option("official", "Official"),
-			new Option("personal", "Personal")
+		List<Option<String>> scopes = List.of(
+			new Option<>("official", "Official"),
+			new Option<>("personal", "Personal")
 		);
 		model.addAttribute("scopes", scopes);
 	}

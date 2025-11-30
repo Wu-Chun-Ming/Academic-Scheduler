@@ -1,8 +1,8 @@
 package io.github.wcm.schedulemanager.domain;
 
-public class Option {
-	private String value;
-	private String label;
+public class Option<T> {
+	private T value;
+	private T label;
 
 	public Option() {
 	}
@@ -11,24 +11,24 @@ public class Option {
 	 * @param value
 	 * @param label
 	 */
-	public Option(String value, String label) {
+	public Option(T value, T label) {
 		this.value = value;
 		this.label = label;
 	}
 
-	public String getValue() {
+	public T getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(T value) {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	public T getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(T label) {
 		this.label = label;
 	}
 }
