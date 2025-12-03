@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="scheduleForm(courses, types, scopes, actionUrl)"
+<div th:fragment="scheduleForm(actionUrl)"
 	th:with="method=${method} ?: 'POST', 
 			isEdit=${isEdit} ?: false, 
 			enableDelete=${enableDelete} ?: false">

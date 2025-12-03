@@ -8,10 +8,7 @@
 
 	<!-- Schedule Form -->
     <div th:replace="~{fragments/schedule-form :: scheduleForm(
-		courses=${courses},
         actionUrl=@{/schedule/create},
-		types=${types},
-		scopes=${scopes},
 		)}"></div>
 </section>
 </html>
