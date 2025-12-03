@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorate="~{layout.html}">
+<section layout:fragment="content">
+    <h1 class="py-2" th:text="'Current Courses'"></h1>
+
+    <!-- Course Table -->
+    <div th:replace="~{fragments/course-table :: courseTable(
+        courses=${courses}
+    )}"></div>
+
+    <a class="btn btn-secondary mb-3" th:href="@{/course/manage}">Manage</a>
+
+    <!-- Course Form -->
+    <div class="border p-2 my-2">
+        <h3 class="py-2" th:text="'New Course'"></h3>
+        <div th:replace="~{fragments/course-form :: courseForm(
+            actionUrl=@{/course/create},
+        )}"></div>
+    </div>
+</section>
+</html>

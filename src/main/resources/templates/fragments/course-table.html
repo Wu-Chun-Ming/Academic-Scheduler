@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="courseTable(courses)">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr class="text-center align-middle">
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Year & Semester</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center align-middle"
+				th:each="course : ${courses}">
+                <td th:text="${course.code}"></td>
+                <td th:text="${course.name}"></td>
+                <td th:text="'Y' + ${course.year} + 'S' + ${course.semester}"></td>
+                <td>
+                    <a class="btn btn-secondary" th:href="@{/course/{code}/edit(code=${course.code})}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</html>
