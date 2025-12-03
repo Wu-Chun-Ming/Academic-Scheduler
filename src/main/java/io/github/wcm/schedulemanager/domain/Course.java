@@ -2,6 +2,8 @@ package io.github.wcm.schedulemanager.domain;
 
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import jakarta.persistence.Column;
@@ -51,8 +53,9 @@ public class Course {
 	@Enumerated(EnumType.STRING)
 	private ProgrammeType programmeType;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "json")
-	private String timeslots;
+	private CourseTimeslots timeslots;
 
 	public Course(CourseRequestDto dto) {
 		this.code = dto.getCode();
@@ -64,6 +67,10 @@ public class Course {
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid programme type: " + dto.getProgrammeType());
 		}
-		this.timeslots = dto.getTimeslots();
+		this.timeslots = new CourseTimeslots(
+			dto.getLecture().stream().map(Timeslot::new).toList(),
+			dto.getTutorial().stream().map(Timeslot::new).toList(),
+			dto.getPractical().stream().map(Timeslot::new).toList()
+		);
 	}
 }

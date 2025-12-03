@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.wcm.schedulemanager.domain.Course;
+import io.github.wcm.schedulemanager.domain.CourseTimeslots;
 import io.github.wcm.schedulemanager.domain.ProgrammeType;
+import io.github.wcm.schedulemanager.domain.Timeslot;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;
@@ -46,7 +48,11 @@ public class CourseService {
 		course.setName(dto.getName());
 		course.setYear(dto.getYear());
 		course.setSemester(dto.getSemester());
-		course.setTimeslots(dto.getTimeslots());
+		course.setTimeslots(new CourseTimeslots(
+			dto.getLecture().stream().map(Timeslot::new).toList(),
+			dto.getTutorial().stream().map(Timeslot::new).toList(),
+			dto.getPractical().stream().map(Timeslot::new).toList()
+		));
 
 		try {
 			course.setProgrammeType(ProgrammeType.valueOf(dto.getProgrammeType().toUpperCase()));

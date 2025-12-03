@@ -1,6 +1,11 @@
 package io.github.wcm.schedulemanager.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.wcm.schedulemanager.domain.Course;
+import io.github.wcm.schedulemanager.domain.Timeslot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +19,10 @@ public class CourseResponseDto {
 	private Integer year;
 	private Integer semester;
 	private String programmeType;
-	private String timeslots;
+	// Time slots
+	private List<TimeslotDto> lecture = new ArrayList<>();
+	private List<TimeslotDto> tutorial = new ArrayList<>();
+	private List<TimeslotDto> practical = new ArrayList<>();
 
 	public CourseResponseDto(Course course) {
 		this.code = course.getCode();
@@ -22,6 +30,24 @@ public class CourseResponseDto {
 		this.year = course.getYear();
 		this.semester = course.getSemester();
 		this.programmeType = course.getProgrammeType().name();
-		this.timeslots = course.getTimeslots();
+
+		List<Timeslot> lectureSlots = course.getTimeslots().getLecture();
+		// Provide a default empty timeslot if none exist
+		if (lectureSlots.isEmpty()) {
+			lectureSlots.add(new Timeslot());
+		}
+		this.lecture = lectureSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
+
+		List<Timeslot> tutorialSlots = course.getTimeslots().getTutorial();
+		if (tutorialSlots.isEmpty()) {
+			tutorialSlots.add(new Timeslot());
+		}
+		this.tutorial = tutorialSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
+
+		List<Timeslot> practicalSlots = course.getTimeslots().getPractical();
+		if (practicalSlots.isEmpty()) {
+			practicalSlots.add(new Timeslot());
+		}
+		this.practical = practicalSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

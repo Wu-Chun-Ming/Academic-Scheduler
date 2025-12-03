@@ -1,5 +1,7 @@
 package io.github.wcm.schedulemanager.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -27,5 +29,8 @@ public class CourseRequestDto {
 	@NotBlank(message = "Programme type is required")
 	private String programmeType;
 
-	private String timeslots;
+	// Time slots
+	private List<TimeslotDto> lecture;
+	private List<TimeslotDto> tutorial;
+	private List<TimeslotDto> practical;
 }
