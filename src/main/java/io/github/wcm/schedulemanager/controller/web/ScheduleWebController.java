@@ -1,4 +1,4 @@
-package io.github.wcm.schedulemanager.controller;
+package io.github.wcm.schedulemanager.controller.web;
 
 import java.util.List;
 
