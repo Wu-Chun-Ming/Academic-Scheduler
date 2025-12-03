@@ -1,5 +1,7 @@
 package io.github.wcm.schedulemanager.controller.web;
 
+import java.time.DayOfWeek;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,22 @@ public class CourseWebController {
 			new Option<>(3, 3)
 		);
 		model.addAttribute("semesters", semesters);
+
+		// Add timeslot types to model
+		List<String> timeslotTypes = Arrays.asList("lecture", "tutorial", "practical");
+		model.addAttribute("timeslotTypes", timeslotTypes);
+
+		// Add dayOfWeek options to model
+		List<Option<String>> dayOfWeek = List.of(
+		    new Option<String>(DayOfWeek.MONDAY.name(), "Monday"),
+		    new Option<String>(DayOfWeek.TUESDAY.name(), "Tuesday"),
+		    new Option<String>(DayOfWeek.WEDNESDAY.name(), "Wednesday"),
+		    new Option<String>(DayOfWeek.THURSDAY.name(), "Thursday"),
+		    new Option<String>(DayOfWeek.FRIDAY.name(), "Friday"),
+		    new Option<String>(DayOfWeek.SATURDAY.name(), "Saturday"),
+		    new Option<String>(DayOfWeek.SUNDAY.name(), "Sunday")
+		);
+		model.addAttribute("dayOfWeek", dayOfWeek);
 	}
 
 	// Add previousUrl to model
