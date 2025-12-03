@@ -54,6 +54,15 @@ public class ScheduleWebController {
 		}
 	}
 
+	// Add current schedules to model attribute
+	private void addCurrentSchedulesToModel(Model model) {
+		if (!model.containsAttribute("schedules")) {
+			List<Schedule> schedules = scheduleService.getCurrentSchedules();
+			List<ScheduleResponseDto> schedulesDto = schedules.stream().map(ScheduleResponseDto::new).toList();
+			model.addAttribute("schedules", schedulesDto);
+		}
+	}
+
 	// Populate form data for form fields 
 	private void populateFormData(Model model) {
 		if (!model.containsAttribute("courses")) {
@@ -101,7 +110,7 @@ public class ScheduleWebController {
 		if (model.containsAttribute("previousUrl")) {
 			model.asMap().remove("previousUrl");
 		}
-		addSchedulesToModel(model);
+		addCurrentSchedulesToModel(model);
 
 		return "schedule/index";
 	}

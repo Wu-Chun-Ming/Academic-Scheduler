@@ -1,5 +1,8 @@
 package io.github.wcm.schedulemanager.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -37,8 +40,10 @@ public class ScheduleService {
 	@Transactional(readOnly = true)
 	public List<Schedule> getAllSchedules() {
 		List<Schedule> schedules = entityManager.createQuery(
-			    "SELECT s FROM Schedule s JOIN FETCH s.course", Schedule.class
-			).getResultList();
+		    "SELECT s FROM Schedule s JOIN FETCH s.course "
+			+ "ORDER BY s.startDate DESC, s.startTime DESC",
+			Schedule.class)
+		.getResultList();
 
 		return schedules;
 	}
@@ -106,5 +111,48 @@ public class ScheduleService {
 
 	public void deleteSchedule(int id) {
 		scheduleRepository.deleteById(id);
+	}
+
+	// Update schedule status
+	private void updateScheduleStatus(Schedule schedule, Status newStatus) {
+		schedule.setStatus(newStatus);
+		scheduleRepository.save(schedule);
+	}
+
+	// Update expired schedule's status and get current schedules
+	@Transactional(readOnly = true)
+	public List<Schedule> getCurrentSchedules() {
+		LocalDate today = LocalDate.now();
+		LocalTime now = LocalTime.now();
+		
+		// Get pending schedules
+		List<Schedule> pendingSchedules = entityManager.createQuery(
+			"SELECT s FROM Schedule s " 
+			+ "WHERE s.status = :pending",
+			Schedule.class)
+		.setParameter("pending", Status.PENDING)
+		.getResultList();
+
+		// Update status of expired schedules
+		for (Schedule schedule : pendingSchedules) {
+			LocalDateTime scheduleEndTime = schedule.getEndDate().atTime(schedule.getEndTime());
+			if (LocalDateTime.now().isAfter(scheduleEndTime)) {
+				updateScheduleStatus(schedule, Status.EXPIRED);
+			}
+		}
+
+		// Get current schedules
+		List<Schedule> currentSchedules = entityManager.createQuery(
+			"SELECT s FROM Schedule s JOIN FETCH s.course " 
+			+ "WHERE s.status = :pending " 
+			+ "AND s.startDate <= :today AND s.endDate >= :today " 
+			+ "AND s.startTime <= :now AND s.endTime >= :now",
+			Schedule.class)
+		.setParameter("pending", Status.PENDING)
+		.setParameter("today", today)
+		.setParameter("now", now)
+		.getResultList();
+
+		return currentSchedules;
 	}
 }
