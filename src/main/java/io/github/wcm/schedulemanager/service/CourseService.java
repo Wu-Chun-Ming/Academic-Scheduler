@@ -15,10 +15,16 @@ import io.github.wcm.schedulemanager.domain.Timeslot;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 @Transactional
 public class CourseService {
+	
+	@PersistenceContext
+	EntityManager entityManager;
+
 	private final CourseRepository courseRepository;
 
 	@Autowired
@@ -31,7 +37,13 @@ public class CourseService {
 	@Transactional(readOnly = true)
 	@Cacheable("courses")
 	public List<Course> getAllCourses() {
-		return courseRepository.findAll();
+		List<Course> courses = entityManager.createQuery(
+		    "SELECT c FROM Course c "
+			+ "ORDER BY c.year DESC, c.semester DESC",
+			Course.class)
+		.getResultList();
+
+		return courses;
 	}
 
 	@Transactional(readOnly = true)
