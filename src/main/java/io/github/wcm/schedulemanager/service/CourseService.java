@@ -2,6 +2,7 @@ package io.github.wcm.schedulemanager.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ import io.github.wcm.schedulemanager.repository.CourseRepository;
 @Transactional
 public class CourseService {
 	private final CourseRepository courseRepository;
+
+	@Autowired
+	private StudentService studentService;
 
 	public CourseService(CourseRepository courseRepository) {
 		this.courseRepository = courseRepository;
@@ -71,5 +75,13 @@ public class CourseService {
 	@CacheEvict(value = "courses", allEntries = true)
 	public void deleteCourse(String code) {
 		courseRepository.deleteByCode(code);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Course> getCurrentCourses() {
+		int currentYear = studentService.getCurrentStudent().getCurrentYear();
+		int currentSemester = studentService.getCurrentStudent().getCurrentSemester();
+
+		return courseRepository.findByYearAndSemester(currentYear, currentSemester);
 	}
 }

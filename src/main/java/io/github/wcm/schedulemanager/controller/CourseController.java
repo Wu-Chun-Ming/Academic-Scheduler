@@ -68,4 +68,12 @@ public class CourseController {
 		courseService.deleteCourse(code);
 		return ResponseEntity.noContent().build();
 	}
+
+	@GetMapping("/current")
+	public ResponseEntity<List<CourseResponseDto>> getCurrentCourses() {
+		List<Course> courses = courseService.getCurrentCourses();
+		List<CourseResponseDto> response = courses.stream().map(CourseResponseDto::new).toList();
+
+		return ResponseEntity.ok(response);
+	}
 }

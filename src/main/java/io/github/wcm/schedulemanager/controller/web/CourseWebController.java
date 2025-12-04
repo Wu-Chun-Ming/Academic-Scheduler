@@ -22,6 +22,7 @@ import io.github.wcm.schedulemanager.domain.Option;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.service.CourseService;
+import io.github.wcm.schedulemanager.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -32,6 +33,9 @@ public class CourseWebController {
 	@Autowired
 	private CourseService courseService;
 
+	@Autowired
+	private StudentService studentService;
+
 	// Add courses to model attribute
 	private void addCoursesToModel(Model model) {
 		if (!model.containsAttribute("courses")) {
@@ -41,12 +45,17 @@ public class CourseWebController {
 		}
 	}
 
+	// Add current courses to model attribute
+	private void addCurrentCoursesToModel(Model model) {
+		if (!model.containsAttribute("courses")) {
+			List<Course> courses = courseService.getCurrentCourses();
+			List<CourseResponseDto> coursesDto = courses.stream().map(CourseResponseDto::new).toList();
+			model.addAttribute("courses", coursesDto);
+		}
+	}
+
 	// Populate form data for form fields 
 	private void populateFormData(Model model) {
-		if (!model.containsAttribute("courses")) {
-			addCoursesToModel(model);
-		}
-
 		// Add year options to model
 		List<Option<Integer>> years = List.of(
 			new Option<>(1, 1),
@@ -106,7 +115,9 @@ public class CourseWebController {
 			model.addAttribute("course", new CourseRequestDto());
 		}
         populateFormData(model);
-		addCoursesToModel(model);
+		model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
+		model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
+		addCurrentCoursesToModel(model);
 
 		return "course/index";
 	}
