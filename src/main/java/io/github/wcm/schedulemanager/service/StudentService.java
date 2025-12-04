@@ -69,4 +69,29 @@ public class StudentService {
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
+
+    // Retrieve the currently logged-in student
+    public Student getCurrentStudent() {
+        return seedDefaultStudent();
+    }
+    
+	// Seed default student if not exists
+    private Student seedDefaultStudent() {
+    	String defaultName = "Default Student";
+    	return studentRepository.findByName(defaultName).orElseGet(() -> {
+			Student student = new Student();
+			student.setName(defaultName);
+			student.setGender("M");
+			student.setProgramme("Default Programme");
+			student.setProgrammeType(ProgrammeType.UNDERGRADUATE);
+			LocalDate today = LocalDate.now();
+			student.setEnrollmentDate(LocalDate.of(today.getYear(), 1, 1));
+			student.setGraduationDate(LocalDate.of(today.getYear() + 2, 1, 1));
+			student.setCurrentYear(1);
+			student.setCurrentSemester(1);
+			student.setStatus("NORMAL");
+    		
+    		return studentRepository.save(student);
+    	});
+    }
 }
