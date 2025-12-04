@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,7 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("schedules")
 	public List<Schedule> getAllSchedules() {
 		List<Schedule> schedules = entityManager.createQuery(
 		    "SELECT s FROM Schedule s JOIN FETCH s.course "
@@ -53,6 +56,7 @@ public class ScheduleService {
 		return scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
 	}
 
+	@CacheEvict(value = "schedules", allEntries = true)
 	public Schedule createSchedule(ScheduleRequestDto dto) {
 		// Load course entity
 		Course course = courseRepository.findByCode(dto.getCourseCode())
@@ -64,6 +68,7 @@ public class ScheduleService {
 		return scheduleRepository.save(schedule);
 	}
 
+	@CacheEvict(value = "schedules", allEntries = true)
 	public Schedule updateSchedule(ScheduleRequestDto dto, int id) {
 		// Load schedule entity
 		Schedule schedule = scheduleRepository.findById(id)
@@ -109,6 +114,7 @@ public class ScheduleService {
 		return scheduleRepository.save(schedule);
 	}
 
+	@CacheEvict(value = "schedules", allEntries = true)
 	public void deleteSchedule(int id) {
 		scheduleRepository.deleteById(id);
 	}

@@ -2,6 +2,8 @@ package io.github.wcm.schedulemanager.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class CourseService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable("courses")
 	public List<Course> getAllCourses() {
 		return courseRepository.findAll();
 	}
@@ -32,6 +35,7 @@ public class CourseService {
 		return courseRepository.findByCode(code).orElseThrow(() -> new CourseNotFoundException(code));
 	}
 
+	@CacheEvict(value = "courses", allEntries = true)
 	public Course createCourse(CourseRequestDto dto) {
 		// Create entity from DTO
 		Course course = new Course(dto);
@@ -39,6 +43,7 @@ public class CourseService {
 		return courseRepository.save(course);
 	}
 
+	@CacheEvict(value = "courses", allEntries = true)
 	public Course updateCourse(CourseRequestDto dto, String code) {
 		// Load course entity
 		Course course = courseRepository.findByCode(code).orElseThrow(() -> new CourseNotFoundException(code));
@@ -63,6 +68,7 @@ public class CourseService {
 		return courseRepository.save(course);
 	}
 
+	@CacheEvict(value = "courses", allEntries = true)
 	public void deleteCourse(String code) {
 		courseRepository.deleteByCode(code);
 	}
