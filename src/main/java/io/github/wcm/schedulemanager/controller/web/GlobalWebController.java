@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Option;
 import io.github.wcm.schedulemanager.domain.ProgrammeType;
+import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.StudentRequestDto;
 import io.github.wcm.schedulemanager.dto.StudentResponseDto;
+import io.github.wcm.schedulemanager.service.CourseService;
 import io.github.wcm.schedulemanager.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,6 +32,8 @@ import jakarta.validation.Valid;
 public class GlobalWebController {
 	@Autowired
 	private StudentService studentService;
+	@Autowired
+	private CourseService courseService;
 
     // Populate form data for form fields
 	@ModelAttribute
@@ -74,6 +79,15 @@ public class GlobalWebController {
 		model.addAttribute("semesters", semesters);
 	}
 
+	// Add current courses to model attribute
+	private void addCurrentCoursesToModel(Model model) {
+		if (!model.containsAttribute("courses")) {
+			List<Course> courses = courseService.getCurrentCourses();
+			List<CourseResponseDto> coursesDto = courses.stream().map(CourseResponseDto::new).toList();
+			model.addAttribute("courses", coursesDto);
+		}
+	}
+
 	// Add previousUrl to model
 	private void addPreviousUrlToModel(
 		Model model, 
@@ -90,6 +104,9 @@ public class GlobalWebController {
 
 	@GetMapping({"", "/"})
 	public String home(Model model) {
+		model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
+		model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
+		addCurrentCoursesToModel(model);
 		return "index";
 	}
 

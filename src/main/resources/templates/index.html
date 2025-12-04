@@ -3,7 +3,13 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
     layout:decorate="~{layout.html}">
 <section layout:fragment="content">
-    <h1 class="py-2" th:text="'Welcome to the Academic Scheduler'"></h1>
+    <h1 class="py-2" th:text="'Schedule Calendar'"></h1>
+
+    <h1 class="py-2" th:text="'Current Courses (Y' + ${currentYear} + 'S' + ${currentSemester} + ')'"></h1>
+    <!-- Course Table -->
+    <div th:replace="~{fragments/course-table :: courseTable(
+        courses=${courses}
+    )}"></div>
 </section>
 
 </html>
