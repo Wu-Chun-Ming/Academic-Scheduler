@@ -1,0 +1,118 @@
+<!-- Profile Modal -->
+<div xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	th:fragment="profileModal" 
+    class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form" id="profileForm" th:object="${student}" th:action="@{/profile/update}" method="POST" th:csrf="true">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" th:name="previousUrl" th:value="${previousUrl}" />
+
+                    <!-- Error Messages -->
+                    <div class="alert alert-danger" style="display: none;">
+                        <ul></ul>
+                    </div>
+
+                    <!-- Student ID -->
+                    <div class="mb-3">
+                        <label for="id" class="form-label fw-bold">Student ID</label>
+                        <input type="number" class="form-control" th:field="*{id}" placeholder="Enter Student ID" autocomplete="off" required readonly>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Name</label>
+                        <input type="text" class="form-control" th:field="*{name}" placeholder="Enter Name" autocomplete="off" oninput="this.value = this.value.toUpperCase()" required>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mb-3">
+                        <label for="gender" class="form-label fw-bold">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option th:each="gender : ${genders}"
+                                    th:value="${gender.value}"
+                                    th:text="${gender.label}"
+                                    th:selected="${gender.value == student.gender}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Programme Type -->
+                    <div class="mb-3">
+                        <label for="programmeType" class="form-label fw-bold">Programme Type</label>
+                        <select class="form-select" id="programmeType" name="programmeType" required>
+                            <option value="" selected disabled>Select Programme Type</option>
+                            <option th:each="programmeType : ${programmeTypes}"
+                                    th:value="${programmeType.value}"
+                                    th:text="${programmeType.label}"
+                                    th:selected="${programmeType.value == student.programmeType}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Programme -->
+                    <div class="mb-3">
+                        <label for="programme" class="form-label fw-bold">Programme</label>
+                        <select class="form-select" id="programme" name="programme" required>
+                            <option value="" selected disabled>Select Programme</option>
+                            <option th:each="programme : ${programmes}"
+                                    th:value="${programme.value}"
+                                    th:text="${programme.label}"
+                                    th:selected="${programme.value == student.programme}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Enrollment Date -->
+                    <div class="mb-3">
+                        <label for="enrollmentDate" class="form-label fw-bold">Enrollment Date</label>
+                        <input type="date" class="form-control" th:field="*{enrollmentDate}">
+                    </div>
+
+                    <!-- Graduation Date -->
+                    <div class="mb-3">
+                        <label for="graduationDate" class="form-label fw-bold">Graduation Date</label>
+                        <input type="date" class="form-control" th:field="*{graduationDate}">
+                    </div>
+
+                    <!-- Current Year -->
+                    <div class="mb-3">
+                        <label for="currentYear" class="form-label fw-bold">Year</label>
+                        <select class="form-select" id="currentYear" name="currentYear" required>
+                            <option value="" selected disabled>Select Year</option>
+                            <option th:each="year : ${years}"
+                                    th:value="${year.value}"
+                                    th:text="${year.label}"
+                                    th:selected="${year.value == student.currentYear}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Current Semester -->
+                    <div class="mb-3">
+                        <label for="currentSemester" class="form-label fw-bold">Semester</label>
+                        <select class="form-select" id="currentSemester" name="currentSemester" required>
+                            <option value="" selected disabled>Select Semester</option>
+                            <option th:each="semester : ${semesters}"
+                                    th:value="${semester.value}"
+                                    th:text="${semester.label}"
+                                    th:selected="${semester.value == student.currentSemester}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
