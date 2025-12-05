@@ -51,7 +51,7 @@ public class Schedule {
 	private LocalTime endTime;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "coursecode", referencedColumnName = "code")
+	@JoinColumn(name = "courseCode", referencedColumnName = "code")
 	private Course course;
 
 	@Column(nullable = false)
