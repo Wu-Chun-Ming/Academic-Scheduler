@@ -1,8 +1,10 @@
 package io.github.wcm.schedulemanager.service;
 
 import java.time.DayOfWeek;
+import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -110,7 +112,7 @@ public class ModelPopulationService {
 		List<Option<String>> scopes = Arrays.stream(Scope.values())
 			.map(scope -> new Option<>(
 				scope.name(),
-				scope.name().substring(0, 1).toUpperCase() + scope.name().substring(1).toLowerCase()
+				scope.getLabel()
 			))
 			.toList();
 		model.addAttribute("scopes", scopes);
@@ -122,7 +124,7 @@ public class ModelPopulationService {
 		List<Option<String>> programmeTypes = Arrays.stream(ProgrammeType.values())
 			.map(programmeType -> new Option<>(
 				programmeType.name(),
-				programmeType.name().substring(0, 1).toUpperCase() + programmeType.name().substring(1).toLowerCase()
+				programmeType.getLabel()
 			))
 			.toList();
 		model.addAttribute("programmeTypes", programmeTypes);
@@ -151,7 +153,7 @@ public class ModelPopulationService {
 		List<Option<String>> dayOfWeek = Arrays.stream(DayOfWeek.values())
 			.map(day -> new Option<>(
 				day.name(),
-				day.name().substring(0, 1).toUpperCase() + day.name().substring(1).toLowerCase()
+				day.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
 			))
 			.toList();
 		model.addAttribute("dayOfWeek", dayOfWeek);

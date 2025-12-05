@@ -1,18 +1,17 @@
 package io.github.wcm.schedulemanager.domain.enums;
 
 public enum Status {
-    PENDING("pending"),
-    EXPIRED("expired"),
-    SUBMITTED("submitted");
+    PENDING("Pending"),
+    EXPIRED("Expired"),
+    SUBMITTED("Submitted");
 
-    private final String value;
+    private final String label;
 
-    Status(String value) {
-        this.value = value;
+    Status(String label) {
+        this.label = label;
     }
 
-    @Override
-    public String toString() {
-        return value;
+    public String getLabel() {
+        return label;
     }
 }

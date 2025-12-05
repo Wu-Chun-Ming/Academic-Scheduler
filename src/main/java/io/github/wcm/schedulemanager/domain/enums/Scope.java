@@ -1,17 +1,16 @@
 package io.github.wcm.schedulemanager.domain.enums;
 
 public enum Scope {
-    OFFICIAL("official"),
-    PERSONAL("personal");
+    OFFICIAL("Official"),
+    PERSONAL("Personal");
 
-    private final String value;
+    private final String label;
 
-    Scope(String value) {
-        this.value = value;
+    Scope(String label) {
+        this.label = label;
     }
 
-    @Override
-    public String toString() {
-        return value;
+    public String getLabel() {
+        return label;
     }
 }

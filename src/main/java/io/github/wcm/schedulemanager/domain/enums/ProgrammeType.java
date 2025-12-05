@@ -1,17 +1,16 @@
 package io.github.wcm.schedulemanager.domain.enums;
 
 public enum ProgrammeType {
-    FOUNDATION("foundation"), 
-    UNDERGRADUATE("undergraduate");
+    FOUNDATION("Foundation"), 
+    UNDERGRADUATE("Undergraduate");
 
-    private final String value;
+    private final String label;
 
-    ProgrammeType(String value) {
-        this.value = value;
+    ProgrammeType(String label) {
+        this.label = label;
     }
 
-    @Override
-    public String toString() {
-        return value;
+    public String getLabel() {
+        return label;
     }
 }
