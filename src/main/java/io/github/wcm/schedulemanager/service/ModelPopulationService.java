@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Option;
+import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Schedule;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.ScheduleResponseDto;
@@ -103,6 +104,13 @@ public class ModelPopulationService {
 
 	// Populate course form data for form fields 
 	public void populateCourseForm(Model model) {
+		// Add programme type options to model
+		List<Option<String>> programmeTypes = List.of(
+			new Option<>(ProgrammeType.FOUNDATION.name(), "Foundation"),
+			new Option<>(ProgrammeType.UNDERGRADUATE.name(), "Undergraduate")
+		);
+		model.addAttribute("programmeTypes", programmeTypes);
+
 		// Add year options to model
 		List<Option<Integer>> years = List.of(
 			new Option<>(1, 1),

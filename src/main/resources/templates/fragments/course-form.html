@@ -32,6 +32,15 @@
             <input type="text" class="form-control" th:field="*{name}" placeholder="Enter Course Name" autocomplete="off" oninput="this.value = this.value.toUpperCase()" required>
         </div>
 
+        <!-- Programme Type -->
+        <div class='mb-3'>
+            <label for="programmeType" class="form-label fw-bold">Programme Type:</label>
+            <select class="form-select" id="programmeType" name="programmeType" required>
+                <option value="" selected disabled>Select Programme Type</option>
+                <option th:each="programmeType : ${programmeTypes}" th:value="${programmeType.value}" th:text="${programmeType.label}" th:selected="${programmeType.value == course.programmeType}"></option>
+            </select>
+        </div>
+
         <!-- Year -->
         <div class='mb-3'>
             <label for="year" class="form-label fw-bold">Year:</label>

@@ -8,8 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class CourseRequestDto {
 	@NotEmpty(message = "Course code is required")
 	@Size(min = 7, max = 8, message = "Course code must be 7-8 characters")
