@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,10 +29,14 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping({"", "/"})
 public class GlobalWebController {
-	@Autowired
-	private StudentService studentService;
-	@Autowired
-	private CourseService courseService;
+
+	private final StudentService studentService;
+	private final CourseService courseService;
+
+	public GlobalWebController(StudentService studentService, CourseService courseService) {
+		this.studentService = studentService;
+		this.courseService = courseService;
+	}
 
     // Populate form data for form fields
 	@ModelAttribute

@@ -2,7 +2,6 @@ package io.github.wcm.schedulemanager.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/schedules")
 public class ScheduleController {
-	@Autowired
-	private ScheduleService scheduleService;
+
+	private final ScheduleService scheduleService;
 
 	public ScheduleController(ScheduleService scheduleService) {
 		this.scheduleService = scheduleService;
