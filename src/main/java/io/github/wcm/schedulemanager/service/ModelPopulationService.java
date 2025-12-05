@@ -20,10 +20,12 @@ public class ModelPopulationService {
 
     private final CourseService courseService;
     private final ScheduleService scheduleService;
+	private final StudentService studentService;
     
-    public ModelPopulationService(CourseService courseService, ScheduleService scheduleService) {
+    public ModelPopulationService(CourseService courseService, ScheduleService scheduleService, StudentService studentService) {
     	this.courseService = courseService;
     	this.scheduleService = scheduleService;
+    	this.studentService = studentService;
     }
 
 	// Add courses to model attribute
@@ -74,6 +76,14 @@ public class ModelPopulationService {
         if (previousUrl != null && !currentUrl.equals(previousUrl)) {
         	model.addAttribute("previousUrl", previousUrl);
         }
+	}
+
+	// Add current year and semester to model
+	public void addCurrentYearAndSemesterToModel(Model model) {
+		if (!model.containsAttribute("currentYear") && !model.containsAttribute("currentSemester")) {
+			model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
+			model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
+		}
 	}
 	
 	// Populate schedule form data for form fields 

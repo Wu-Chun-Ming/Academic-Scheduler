@@ -22,6 +22,7 @@ import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.StudentRequestDto;
 import io.github.wcm.schedulemanager.dto.StudentResponseDto;
 import io.github.wcm.schedulemanager.service.CourseService;
+import io.github.wcm.schedulemanager.service.ModelPopulationService;
 import io.github.wcm.schedulemanager.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -32,10 +33,12 @@ public class GlobalWebController {
 
 	private final StudentService studentService;
 	private final CourseService courseService;
+    private final ModelPopulationService modelPopulationService;
 
-	public GlobalWebController(StudentService studentService, CourseService courseService) {
+	public GlobalWebController(StudentService studentService, CourseService courseService, ModelPopulationService modelPopulationService) {
 		this.studentService = studentService;
 		this.courseService = courseService;
+		this.modelPopulationService = modelPopulationService;
 	}
 
     // Populate form data for form fields
@@ -107,8 +110,7 @@ public class GlobalWebController {
 
 	@GetMapping({"", "/"})
 	public String home(Model model) {
-		model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
-		model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
+		modelPopulationService.addCurrentYearAndSemesterToModel(model);
 		addCurrentCoursesToModel(model);
 		return "index";
 	}

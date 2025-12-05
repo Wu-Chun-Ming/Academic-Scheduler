@@ -16,7 +16,6 @@ import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.service.CourseService;
 import io.github.wcm.schedulemanager.service.ModelPopulationService;
-import io.github.wcm.schedulemanager.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -26,12 +25,10 @@ import jakarta.validation.Valid;
 public class CourseWebController {
 
 	private final CourseService courseService;
-	private final StudentService studentService;
 	private final ModelPopulationService modelPopulationService;
 
-	public CourseWebController(CourseService courseService, StudentService studentService, ModelPopulationService modelPopulationService) {
+	public CourseWebController(CourseService courseService, ModelPopulationService modelPopulationService) {
 		this.courseService = courseService;
-		this.studentService = studentService;
 		this.modelPopulationService = modelPopulationService;
 	}
 
@@ -47,8 +44,7 @@ public class CourseWebController {
 			model.addAttribute("course", new CourseRequestDto());
 		}
 		modelPopulationService.populateCourseForm(model);
-		model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
-		model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
+		modelPopulationService.addCurrentYearAndSemesterToModel(model);
 		modelPopulationService.addCurrentCoursesToModel(model);
 
 		return "course/index";
