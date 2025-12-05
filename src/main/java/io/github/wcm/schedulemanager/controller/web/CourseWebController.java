@@ -60,6 +60,8 @@ public class CourseWebController {
 	) {
 		if (bindingResult.hasErrors()) {
 			modelPopulationService.populateCourseForm(model);
+			modelPopulationService.addCurrentYearAndSemesterToModel(model);
+			modelPopulationService.addCurrentCoursesToModel(model);
 			model.addAttribute("course", dto);
 			return "course/index";
 		}
