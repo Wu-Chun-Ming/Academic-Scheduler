@@ -60,7 +60,7 @@
 		<!-- Venue -->
 		<div class="mb-3">
 			<label for="venue" class="form-label fw-bold">Venue</label><br>
-			<input type="text" class="form-control" th:field="*{venue}" list="common-venue" autocomplete="off">
+			<input type="text" class="form-control" th:field="*{venue}" placeholder="Enter Venue" list="common-venue" autocomplete="off">
 			<datalist id="common-venue">
 				<option value="TBC">
 				<option value="KB">
@@ -72,7 +72,7 @@
 		<!-- Description -->
 		<div class="mb-3">
 			<label for="description" class="form-label fw-bold">Description</label>
-			<input class="form-control" th:field="*{description}" list="common-description" autocomplete="off" required>
+			<input type="text" class="form-control" th:field="*{description}" placeholder="Enter Description" list="common-description" autocomplete="off" required>
 			<datalist id="common-description">
 				<option value="Group Assignment">
 				<option value="Due Date">
