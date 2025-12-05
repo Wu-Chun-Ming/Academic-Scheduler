@@ -148,16 +148,27 @@ public class ScheduleService {
 		}
 
 		// Get current schedules
-		List<Schedule> currentSchedules = entityManager.createQuery(
-			"SELECT s FROM Schedule s JOIN FETCH s.course " 
-			+ "WHERE s.status = :pending " 
-			+ "AND s.startDate <= :today AND s.endDate >= :today " 
-			+ "AND s.startTime <= :now AND s.endTime >= :now",
-			Schedule.class)
-		.setParameter("pending", Status.PENDING)
-		.setParameter("today", today)
-		.setParameter("now", now)
-		.getResultList();
+		String jpql = """
+			SELECT s FROM Schedule s 
+			JOIN FETCH s.course
+			WHERE s.status = :pending
+			AND (
+					(s.startDate <= :today AND s.endDate = :today AND s.endTime >= :now)
+				OR
+					(s.startDate <= :today AND s.endDate > :today)
+				OR
+					(s.startDate > :today)
+			)
+		""";
+		// Current ongoing schedules AND single-day schedules with end date today
+		// Current ongoing schedules with end date after today
+		// Upcoming schedules
+		
+		List<Schedule> currentSchedules = entityManager.createQuery(jpql, Schedule.class)
+			.setParameter("pending", Status.PENDING)
+			.setParameter("today", today)
+			.setParameter("now", now)
+			.getResultList();
 
 		return currentSchedules;
 	}
