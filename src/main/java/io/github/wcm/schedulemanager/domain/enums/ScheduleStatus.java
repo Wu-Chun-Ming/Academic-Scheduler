@@ -1,13 +1,13 @@
 package io.github.wcm.schedulemanager.domain.enums;
 
-public enum Status {
+public enum ScheduleStatus {
     PENDING("Pending"),
     EXPIRED("Expired"),
     SUBMITTED("Submitted");
 
     private final String label;
 
-    Status(String label) {
+    ScheduleStatus(String label) {
         this.label = label;
     }
 

@@ -8,9 +8,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import io.github.wcm.schedulemanager.domain.enums.ScheduleStatus;
 import io.github.wcm.schedulemanager.domain.enums.ScheduleType;
 import io.github.wcm.schedulemanager.domain.enums.Scope;
-import io.github.wcm.schedulemanager.domain.enums.Status;
 import io.github.wcm.schedulemanager.dto.ScheduleRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,7 +64,7 @@ public class Schedule {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private ScheduleStatus status;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -87,7 +87,7 @@ public class Schedule {
 		this.detail = new Detail(dto.getDescription(), dto.getVenue());
 
 		try {
-			this.status = Status.valueOf(dto.getStatus().toUpperCase());
+			this.status = ScheduleStatus.valueOf(dto.getStatus().toUpperCase());
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid status: " + dto.getStatus());
 		}

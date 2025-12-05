@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Detail;
 import io.github.wcm.schedulemanager.domain.Schedule;
+import io.github.wcm.schedulemanager.domain.enums.ScheduleStatus;
 import io.github.wcm.schedulemanager.domain.enums.ScheduleType;
 import io.github.wcm.schedulemanager.domain.enums.Scope;
-import io.github.wcm.schedulemanager.domain.enums.Status;
 import io.github.wcm.schedulemanager.dto.ScheduleRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.exception.ScheduleNotFoundException;
@@ -101,7 +101,7 @@ public class ScheduleService {
 			throw new IllegalArgumentException("Invalid schedule type: " + dto.getType());
 		}
 		try {
-			schedule.setStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+			schedule.setStatus(ScheduleStatus.valueOf(dto.getStatus().toUpperCase()));
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid status: " + dto.getStatus());
 		}
@@ -120,7 +120,7 @@ public class ScheduleService {
 	}
 
 	// Update schedule status
-	private void updateScheduleStatus(Schedule schedule, Status newStatus) {
+	private void updateScheduleStatus(Schedule schedule, ScheduleStatus newStatus) {
 		schedule.setStatus(newStatus);
 		scheduleRepository.save(schedule);
 	}
@@ -136,14 +136,14 @@ public class ScheduleService {
 			"SELECT s FROM Schedule s " 
 			+ "WHERE s.status = :pending",
 			Schedule.class)
-		.setParameter("pending", Status.PENDING)
+		.setParameter("pending", ScheduleStatus.PENDING)
 		.getResultList();
 
 		// Update status of expired schedules
 		for (Schedule schedule : pendingSchedules) {
 			LocalDateTime scheduleEndTime = schedule.getEndDate().atTime(schedule.getEndTime());
 			if (LocalDateTime.now().isAfter(scheduleEndTime)) {
-				updateScheduleStatus(schedule, Status.EXPIRED);
+				updateScheduleStatus(schedule, ScheduleStatus.EXPIRED);
 			}
 		}
 
@@ -165,7 +165,7 @@ public class ScheduleService {
 		// Upcoming schedules
 		
 		List<Schedule> currentSchedules = entityManager.createQuery(jpql, Schedule.class)
-			.setParameter("pending", Status.PENDING)
+			.setParameter("pending", ScheduleStatus.PENDING)
 			.setParameter("today", today)
 			.setParameter("now", now)
 			.getResultList();
