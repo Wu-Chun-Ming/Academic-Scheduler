@@ -11,6 +11,8 @@ import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Option;
 import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Schedule;
+import io.github.wcm.schedulemanager.domain.ScheduleType;
+import io.github.wcm.schedulemanager.domain.Scope;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.ScheduleResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -94,31 +96,35 @@ public class ModelPopulationService {
 		
 		// Add type options to model
 		List<Option<String>> types = List.of(
-				new Option<>("L", "Lecture"),
-				new Option<>("T", "Tutorial"),
-				new Option<>("P", "Practical"),
-				new Option<>("ASGMT", "Assignment"),
-				new Option<>("ASMT", "Assessment (Test, Quiz)"),
-				new Option<>("FE", "Final Examination"),
-				new Option<>("SP", "Special")
+				new Option<>(ScheduleType.L.name(), "Lecture"),
+				new Option<>(ScheduleType.T.name(), "Tutorial"),
+				new Option<>(ScheduleType.P.name(), "Practical"),
+				new Option<>(ScheduleType.ASGMT.name(), "Assignment"),
+				new Option<>(ScheduleType.ASMT.name(), "Assessment (Test, Quiz)"),
+				new Option<>(ScheduleType.FE.name(), "Final Examination"),
+				new Option<>(ScheduleType.SP.name(), "Special")
 				);
 		model.addAttribute("types", types);
 		
 		// Add scope options to model
-		List<Option<String>> scopes = List.of(
-				new Option<>("official", "Official"),
-				new Option<>("personal", "Personal")
-				);
+		List<Option<String>> scopes = Arrays.stream(Scope.values())
+			.map(scope -> new Option<>(
+				scope.name(),
+				scope.name().substring(0, 1).toUpperCase() + scope.name().substring(1).toLowerCase()
+			))
+			.toList();
 		model.addAttribute("scopes", scopes);
 	}
 
 	// Populate course form data for form fields 
 	public void populateCourseForm(Model model) {
 		// Add programme type options to model
-		List<Option<String>> programmeTypes = List.of(
-			new Option<>(ProgrammeType.FOUNDATION.name(), "Foundation"),
-			new Option<>(ProgrammeType.UNDERGRADUATE.name(), "Undergraduate")
-		);
+		List<Option<String>> programmeTypes = Arrays.stream(ProgrammeType.values())
+			.map(programmeType -> new Option<>(
+				programmeType.name(),
+				programmeType.name().substring(0, 1).toUpperCase() + programmeType.name().substring(1).toLowerCase()
+			))
+			.toList();
 		model.addAttribute("programmeTypes", programmeTypes);
 
 		// Add year options to model
@@ -142,15 +148,12 @@ public class ModelPopulationService {
 		model.addAttribute("timeslotTypes", timeslotTypes);
 
 		// Add dayOfWeek options to model
-		List<Option<String>> dayOfWeek = List.of(
-		    new Option<String>(DayOfWeek.MONDAY.name(), "Monday"),
-		    new Option<String>(DayOfWeek.TUESDAY.name(), "Tuesday"),
-		    new Option<String>(DayOfWeek.WEDNESDAY.name(), "Wednesday"),
-		    new Option<String>(DayOfWeek.THURSDAY.name(), "Thursday"),
-		    new Option<String>(DayOfWeek.FRIDAY.name(), "Friday"),
-		    new Option<String>(DayOfWeek.SATURDAY.name(), "Saturday"),
-		    new Option<String>(DayOfWeek.SUNDAY.name(), "Sunday")
-		);
+		List<Option<String>> dayOfWeek = Arrays.stream(DayOfWeek.values())
+			.map(day -> new Option<>(
+				day.name(),
+				day.name().substring(0, 1).toUpperCase() + day.name().substring(1).toLowerCase()
+			))
+			.toList();
 		model.addAttribute("dayOfWeek", dayOfWeek);
 	}
 }
