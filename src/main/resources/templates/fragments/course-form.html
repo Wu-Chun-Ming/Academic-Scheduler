@@ -133,10 +133,10 @@
                             </select>
 
                             <label class="ms-2 me-2">Start:</label>
-                            <input type="time" class="form-control d-inline w-auto" th:name="${timeslotType} + '[0].start'">
+                            <input type="time" class="form-control d-inline w-auto" th:name="${timeslotType} + '[0].start'" onfocus="this.showPicker()">
 
                             <label class="ms-2 me-2">End:</label>
-                            <input type="time" class="form-control d-inline w-auto" th:name="${timeslotType} + '[0].end'">
+                            <input type="time" class="form-control d-inline w-auto" th:name="${timeslotType} + '[0].end'" onfocus="this.showPicker()">
 
                             <button type="button" class="btn btn-secondary ms-2" 
                                     th:if="${timeslotType == 'lecture'}"
@@ -198,10 +198,10 @@
                     </select>
 
                     <label class="ms-2 me-2">Start:</label>
-                    <input type="time" class="form-control d-inline w-auto" name="${timeslotType}[${index}].start">
+                    <input type="time" class="form-control d-inline w-auto" name="${timeslotType}[${index}].start" onfocus="this.showPicker()">
 
                     <label class="ms-2 me-2">End:</label>
-                    <input type="time" class="form-control d-inline w-auto" name="${timeslotType}[${index}].end">
+                    <input type="time" class="form-control d-inline w-auto" name="${timeslotType}[${index}].end" onfocus="this.showPicker()">
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', html);
