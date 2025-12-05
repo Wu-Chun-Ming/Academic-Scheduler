@@ -1,10 +1,5 @@
 package io.github.wcm.schedulemanager.controller.web;
 
-import java.time.DayOfWeek;
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,11 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import io.github.wcm.schedulemanager.domain.Course;
-import io.github.wcm.schedulemanager.domain.Option;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.service.CourseService;
+import io.github.wcm.schedulemanager.service.ModelPopulationService;
 import io.github.wcm.schedulemanager.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,77 +24,15 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/course")
 public class CourseWebController {
-	@Autowired
-	private CourseService courseService;
 
-	@Autowired
-	private StudentService studentService;
+	private final CourseService courseService;
+	private final StudentService studentService;
+	private final ModelPopulationService modelPopulationService;
 
-	// Add courses to model attribute
-	private void addCoursesToModel(Model model) {
-		if (!model.containsAttribute("courses")) {
-			List<Course> courses = courseService.getAllCourses();
-			List<CourseResponseDto> coursesDto = courses.stream().map(CourseResponseDto::new).toList();
-			model.addAttribute("courses", coursesDto);
-		}
-	}
-
-	// Add current courses to model attribute
-	private void addCurrentCoursesToModel(Model model) {
-		if (!model.containsAttribute("courses")) {
-			List<Course> courses = courseService.getCurrentCourses();
-			List<CourseResponseDto> coursesDto = courses.stream().map(CourseResponseDto::new).toList();
-			model.addAttribute("courses", coursesDto);
-		}
-	}
-
-	// Populate form data for form fields 
-	private void populateFormData(Model model) {
-		// Add year options to model
-		List<Option<Integer>> years = List.of(
-			new Option<>(1, 1),
-			new Option<>(2, 2),
-			new Option<>(3, 3)
-		);
-		model.addAttribute("years", years);
-
-		// Add semester options to model
-		List<Option<Integer>> semesters = List.of(
-			new Option<>(1, 1),
-			new Option<>(2, 2),
-			new Option<>(3, 3)
-		);
-		model.addAttribute("semesters", semesters);
-
-		// Add timeslot types to model
-		List<String> timeslotTypes = Arrays.asList("lecture", "tutorial", "practical");
-		model.addAttribute("timeslotTypes", timeslotTypes);
-
-		// Add dayOfWeek options to model
-		List<Option<String>> dayOfWeek = List.of(
-		    new Option<String>(DayOfWeek.MONDAY.name(), "Monday"),
-		    new Option<String>(DayOfWeek.TUESDAY.name(), "Tuesday"),
-		    new Option<String>(DayOfWeek.WEDNESDAY.name(), "Wednesday"),
-		    new Option<String>(DayOfWeek.THURSDAY.name(), "Thursday"),
-		    new Option<String>(DayOfWeek.FRIDAY.name(), "Friday"),
-		    new Option<String>(DayOfWeek.SATURDAY.name(), "Saturday"),
-		    new Option<String>(DayOfWeek.SUNDAY.name(), "Sunday")
-		);
-		model.addAttribute("dayOfWeek", dayOfWeek);
-	}
-
-	// Add previousUrl to model
-	private void addPreviousUrlToModel(
-		Model model, 
-		HttpServletRequest request
-	) {
-		String currentUrl = request.getRequestURL().toString();
-        String previousUrl = request.getHeader("Referer");
-
-		// If previousUrl exists and different from currentUrl, add it to model
-        if (previousUrl != null && !currentUrl.equals(previousUrl)) {
-        	model.addAttribute("previousUrl", previousUrl);
-        }
+	public CourseWebController(CourseService courseService, StudentService studentService, ModelPopulationService modelPopulationService) {
+		this.courseService = courseService;
+		this.studentService = studentService;
+		this.modelPopulationService = modelPopulationService;
 	}
 
 	// View current courses
@@ -114,10 +46,10 @@ public class CourseWebController {
 		if (!model.containsAttribute("course")) {
 			model.addAttribute("course", new CourseRequestDto());
 		}
-        populateFormData(model);
+		modelPopulationService.populateCourseForm(model);
 		model.addAttribute("currentYear", studentService.getCurrentStudent().getCurrentYear());
 		model.addAttribute("currentSemester", studentService.getCurrentStudent().getCurrentSemester());
-		addCurrentCoursesToModel(model);
+		modelPopulationService.addCurrentCoursesToModel(model);
 
 		return "course/index";
 	}
@@ -131,7 +63,7 @@ public class CourseWebController {
 		RedirectAttributes redirectAttributes
 	) {
 		if (bindingResult.hasErrors()) {
-			populateFormData(model);
+			modelPopulationService.populateCourseForm(model);
 			model.addAttribute("course", dto);
 			return "course/index";
 		}
@@ -152,8 +84,8 @@ public class CourseWebController {
 		CourseResponseDto courseDto = new CourseResponseDto(courseService.getCourseByCode(code));
 		model.addAttribute("course", courseDto);
 		model.addAttribute("code", courseDto.getCode());
-		populateFormData(model);
-		addPreviousUrlToModel(model, request);
+		modelPopulationService.populateCourseForm(model);
+		modelPopulationService.addPreviousUrlToModel(model, request);
 
 		return "course/edit";
 	}
@@ -168,7 +100,7 @@ public class CourseWebController {
 		RedirectAttributes redirectAttributes
 	) {
 		if (bindingResult.hasErrors()) {
-			populateFormData(model);
+			modelPopulationService.populateCourseForm(model);
 			model.addAttribute("course", dto);
 			return "course/edit";
 		}
@@ -197,7 +129,7 @@ public class CourseWebController {
 		if (model.containsAttribute("previousUrl")) {
 			model.asMap().remove("previousUrl");
 		}
-		addCoursesToModel(model);
+		modelPopulationService.addCoursesToModel(model);
 
 		return "course/manage";
 	}

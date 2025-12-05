@@ -1,8 +1,5 @@
 package io.github.wcm.schedulemanager.controller.web;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,13 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import io.github.wcm.schedulemanager.domain.Course;
-import io.github.wcm.schedulemanager.domain.Option;
-import io.github.wcm.schedulemanager.domain.Schedule;
-import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.ScheduleRequestDto;
 import io.github.wcm.schedulemanager.dto.ScheduleResponseDto;
-import io.github.wcm.schedulemanager.service.CourseService;
+import io.github.wcm.schedulemanager.service.ModelPopulationService;
 import io.github.wcm.schedulemanager.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,77 +23,13 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/schedule")
 public class ScheduleWebController {
-	@Autowired
-	private CourseService courseService;
 
-	@Autowired
-	private ScheduleService scheduleService;
-
-	// Add courses to model attribute
-	private void addCoursesToModel(Model model) {
-		if (!model.containsAttribute("courses")) {
-			List<Course> courses = courseService.getAllCourses();
-			List<CourseResponseDto> coursesDto = courses.stream().map(CourseResponseDto::new).toList();
-			model.addAttribute("courses", coursesDto);
-		}
-	}
-
-	// Add schedules to model attribute
-	private void addSchedulesToModel(Model model) {
-		if (!model.containsAttribute("schedules")) {
-			List<Schedule> schedules = scheduleService.getAllSchedules();
-			List<ScheduleResponseDto> schedulesDto = schedules.stream().map(ScheduleResponseDto::new).toList();
-			model.addAttribute("schedules", schedulesDto);
-		}
-	}
-
-	// Add current schedules to model attribute
-	private void addCurrentSchedulesToModel(Model model) {
-		if (!model.containsAttribute("schedules")) {
-			List<Schedule> schedules = scheduleService.getCurrentSchedules();
-			List<ScheduleResponseDto> schedulesDto = schedules.stream().map(ScheduleResponseDto::new).toList();
-			model.addAttribute("schedules", schedulesDto);
-		}
-	}
-
-	// Populate form data for form fields 
-	private void populateFormData(Model model) {
-		if (!model.containsAttribute("courses")) {
-			addCoursesToModel(model);
-		}
-
-		// Add types to model
-		List<Option<String>> types = List.of(
-			new Option<>("L", "Lecture"),
-			new Option<>("T", "Tutorial"),
-			new Option<>("P", "Practical"),
-			new Option<>("ASGMT", "Assignment"),
-			new Option<>("ASMT", "Assessment (Test, Quiz)"),
-			new Option<>("FE", "Final Examination"),
-			new Option<>("SP", "Special")
-		);
-		model.addAttribute("types", types);
-
-		// Add scopes to model
-		List<Option<String>> scopes = List.of(
-			new Option<>("official", "Official"),
-			new Option<>("personal", "Personal")
-		);
-		model.addAttribute("scopes", scopes);
-	}
-
-	// Add previousUrl to model
-	private void addPreviousUrlToModel(
-		Model model, 
-		HttpServletRequest request
-	) {
-		String currentUrl = request.getRequestURL().toString();
-        String previousUrl = request.getHeader("Referer");
-
-		// If previousUrl exists and different from currentUrl, add it to model
-        if (previousUrl != null && !currentUrl.equals(previousUrl)) {
-        	model.addAttribute("previousUrl", previousUrl);
-        }
+	private final ScheduleService scheduleService;
+	private final ModelPopulationService modelPopulationService;
+	
+	public ScheduleWebController(ScheduleService scheduleService, ModelPopulationService modelPopulationService) {
+		this.scheduleService = scheduleService;
+		this.modelPopulationService = modelPopulationService;
 	}
 
 	// View current schedules
@@ -110,7 +39,7 @@ public class ScheduleWebController {
 		if (model.containsAttribute("previousUrl")) {
 			model.asMap().remove("previousUrl");
 		}
-		addCurrentSchedulesToModel(model);
+		modelPopulationService.addCurrentSchedulesToModel(model);
 
 		return "schedule/index";
 	}
@@ -126,8 +55,8 @@ public class ScheduleWebController {
 		if (!model.containsAttribute("schedule")) {
 			model.addAttribute("schedule", new ScheduleRequestDto());
 		}
-		populateFormData(model);
-		addPreviousUrlToModel(model, request);
+		modelPopulationService.populateScheduleForm(model);
+		modelPopulationService.addPreviousUrlToModel(model, request);
 
 		return "schedule/create";
 	}
@@ -141,7 +70,7 @@ public class ScheduleWebController {
 		RedirectAttributes redirectAttributes
 	) {
 		if (bindingResult.hasErrors()) {
-			populateFormData(model);
+			modelPopulationService.populateScheduleForm(model);
 			model.addAttribute("schedule", dto);
 			return "schedule/create";
 		}
@@ -163,8 +92,8 @@ public class ScheduleWebController {
 		ScheduleResponseDto scheduleDto = new ScheduleResponseDto(scheduleService.getScheduleById(id));
 		model.addAttribute("schedule", scheduleDto);
 		model.addAttribute("id", scheduleDto.getId());
-		populateFormData(model);
-		addPreviousUrlToModel(model, request);
+		modelPopulationService.populateScheduleForm(model);
+		modelPopulationService.addPreviousUrlToModel(model, request);
 
 		return "schedule/edit";
 	}
@@ -178,7 +107,7 @@ public class ScheduleWebController {
 		RedirectAttributes redirectAttributes
 	) {
 		if (bindingResult.hasErrors()) {
-			populateFormData(model);
+			modelPopulationService.populateScheduleForm(model);
 			model.addAttribute("schedule", dto);
 			return "schedule/edit";
 		}
@@ -208,7 +137,7 @@ public class ScheduleWebController {
 		if (model.containsAttribute("previousUrl")) {
 			model.asMap().remove("previousUrl");
 		}
-		addSchedulesToModel(model);
+		modelPopulationService.addSchedulesToModel(model);
 
 		return "schedule/manage";
 	}
