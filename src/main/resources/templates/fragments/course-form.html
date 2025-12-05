@@ -5,7 +5,7 @@
 			isEdit=${isEdit} ?: false, 
 			enableDelete=${enableDelete} ?: false">
     <!-- Success Message -->
-	<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
+	<div id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
 	    <span th:text="${successMessage}"></span>
 	    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
@@ -14,7 +14,7 @@
 		<input type="hidden" name="_method" th:if="${method != 'POST'}" th:value="${method}">
 
 		<!-- Error Messages -->
-		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+		<div id="errorMessage" class="alert alert-danger" th:if="${#fields.hasErrors()}">
 			<ul>
 				<li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
 			</ul>
@@ -206,6 +206,17 @@
             `;
             container.insertAdjacentHTML('beforeend', html);
         }
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const success = document.getElementById('successMessage');
+            const error = document.getElementById('errorMessage');
+
+            if (success) {
+                success.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (error) {
+                error.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     </script>
 </div>
 
