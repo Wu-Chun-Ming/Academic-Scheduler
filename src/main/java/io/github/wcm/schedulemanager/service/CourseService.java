@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.CourseTimeslots;
 import io.github.wcm.schedulemanager.domain.ProgrammeType;
+import io.github.wcm.schedulemanager.domain.Student;
 import io.github.wcm.schedulemanager.domain.Timeslot;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
@@ -91,9 +92,11 @@ public class CourseService {
 
 	@Transactional(readOnly = true)
 	public List<Course> getCurrentCourses() {
-		int currentYear = studentService.getCurrentStudent().getCurrentYear();
-		int currentSemester = studentService.getCurrentStudent().getCurrentSemester();
+		Student currentStudent = studentService.getCurrentStudent();
+		ProgrammeType programmeType = currentStudent.getProgrammeType();
+		int currentYear = currentStudent.getCurrentYear();
+		int currentSemester = currentStudent.getCurrentSemester();
 
-		return courseRepository.findByYearAndSemester(currentYear, currentSemester);
+		return courseRepository.findByProgrammeTypeAndYearAndSemester(programmeType, currentYear, currentSemester);
 	}
 }
