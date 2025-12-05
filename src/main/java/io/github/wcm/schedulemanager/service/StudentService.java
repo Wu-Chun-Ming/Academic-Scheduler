@@ -8,8 +8,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Student;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 import io.github.wcm.schedulemanager.dto.StudentRequestDto;
 import io.github.wcm.schedulemanager.exception.StudentNotFoundException;
 import io.github.wcm.schedulemanager.repository.StudentRepository;

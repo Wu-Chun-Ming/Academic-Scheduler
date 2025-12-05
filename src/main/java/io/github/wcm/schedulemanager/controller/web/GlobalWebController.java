@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Option;
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.StudentRequestDto;
 import io.github.wcm.schedulemanager.dto.StudentResponseDto;

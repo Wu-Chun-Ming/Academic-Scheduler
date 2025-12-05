@@ -8,6 +8,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import io.github.wcm.schedulemanager.domain.enums.ScheduleType;
+import io.github.wcm.schedulemanager.domain.enums.Scope;
+import io.github.wcm.schedulemanager.domain.enums.Status;
 import io.github.wcm.schedulemanager.dto.ScheduleRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

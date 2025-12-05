@@ -1,8 +1,8 @@
-package io.github.wcm.schedulemanager.domain;
+package io.github.wcm.schedulemanager.domain.enums;
 
 public enum Scope {
-    PERSONAL("personal"), 
-    OFFICIAL("official");
+    OFFICIAL("official"),
+    PERSONAL("personal");
 
     private final String value;
 

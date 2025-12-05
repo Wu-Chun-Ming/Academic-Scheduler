@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.CourseTimeslots;
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Student;
 import io.github.wcm.schedulemanager.domain.Timeslot;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 import io.github.wcm.schedulemanager.dto.CourseRequestDto;
 import io.github.wcm.schedulemanager.exception.CourseNotFoundException;
 import io.github.wcm.schedulemanager.repository.CourseRepository;

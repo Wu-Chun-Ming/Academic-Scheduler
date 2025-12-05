@@ -1,4 +1,4 @@
-package io.github.wcm.schedulemanager.domain;
+package io.github.wcm.schedulemanager.domain.enums;
 
 public enum Status {
     PENDING("pending"),

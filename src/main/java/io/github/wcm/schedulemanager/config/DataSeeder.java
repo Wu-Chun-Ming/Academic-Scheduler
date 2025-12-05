@@ -6,8 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Student;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 import io.github.wcm.schedulemanager.repository.StudentRepository;
 
 @Configuration

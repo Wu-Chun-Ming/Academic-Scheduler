@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.github.wcm.schedulemanager.domain.Course;
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 
 public interface CourseRepository extends JpaRepository<Course, String> {
 	boolean existsByCode(String code);

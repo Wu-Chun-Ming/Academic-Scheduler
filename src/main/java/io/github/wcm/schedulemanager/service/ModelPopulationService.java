@@ -9,10 +9,10 @@ import org.springframework.ui.Model;
 
 import io.github.wcm.schedulemanager.domain.Course;
 import io.github.wcm.schedulemanager.domain.Option;
-import io.github.wcm.schedulemanager.domain.ProgrammeType;
 import io.github.wcm.schedulemanager.domain.Schedule;
-import io.github.wcm.schedulemanager.domain.ScheduleType;
-import io.github.wcm.schedulemanager.domain.Scope;
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
+import io.github.wcm.schedulemanager.domain.enums.ScheduleType;
+import io.github.wcm.schedulemanager.domain.enums.Scope;
 import io.github.wcm.schedulemanager.dto.CourseResponseDto;
 import io.github.wcm.schedulemanager.dto.ScheduleResponseDto;
 import jakarta.servlet.http.HttpServletRequest;

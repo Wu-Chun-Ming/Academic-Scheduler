@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import io.github.wcm.schedulemanager.domain.enums.ProgrammeType;
 import io.github.wcm.schedulemanager.dto.StudentRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
