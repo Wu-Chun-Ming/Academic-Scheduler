@@ -1,0 +1,175 @@
+package io.github.wcm.academicscheduler.service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import io.github.wcm.academicscheduler.domain.Course;
+import io.github.wcm.academicscheduler.domain.Detail;
+import io.github.wcm.academicscheduler.domain.Schedule;
+import io.github.wcm.academicscheduler.domain.enums.ScheduleStatus;
+import io.github.wcm.academicscheduler.domain.enums.ScheduleType;
+import io.github.wcm.academicscheduler.domain.enums.Scope;
+import io.github.wcm.academicscheduler.dto.ScheduleRequestDto;
+import io.github.wcm.academicscheduler.exception.CourseNotFoundException;
+import io.github.wcm.academicscheduler.exception.ScheduleNotFoundException;
+import io.github.wcm.academicscheduler.repository.CourseRepository;
+import io.github.wcm.academicscheduler.repository.ScheduleRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+@Service
+@Transactional
+public class ScheduleService {
+	@PersistenceContext
+	EntityManager entityManager;
+
+	private final CourseRepository courseRepository;
+	private final ScheduleRepository scheduleRepository;
+
+	// Autowired constructor since only one constructor
+	public ScheduleService(CourseRepository courseRepository, ScheduleRepository scheduleRepository) {
+		this.courseRepository = courseRepository;
+		this.scheduleRepository = scheduleRepository;
+	}
+
+	@Transactional(readOnly = true)
+	@Cacheable("schedules")
+	public List<Schedule> getAllSchedules() {
+		List<Schedule> schedules = entityManager.createQuery(
+		    "SELECT s FROM Schedule s JOIN FETCH s.course "
+			+ "ORDER BY s.startDate DESC, s.startTime DESC",
+			Schedule.class)
+		.getResultList();
+
+		return schedules;
+	}
+
+	@Transactional(readOnly = true)
+	public Schedule getScheduleById(int id) {
+		return scheduleRepository.findById(id).orElseThrow(() -> new ScheduleNotFoundException(id));
+	}
+
+	@CacheEvict(value = "schedules", allEntries = true)
+	public Schedule createSchedule(ScheduleRequestDto dto) {
+		// Load course entity
+		Course course = courseRepository.findByCode(dto.getCourseCode())
+				.orElseThrow(() -> new CourseNotFoundException(dto.getCourseCode()));
+
+		// Create entity
+		Schedule schedule = new Schedule(dto, course);
+		// Save entity
+		return scheduleRepository.save(schedule);
+	}
+
+	@CacheEvict(value = "schedules", allEntries = true)
+	public Schedule updateSchedule(ScheduleRequestDto dto, int id) {
+		// Load schedule entity
+		Schedule schedule = scheduleRepository.findById(id)
+				.orElseThrow(() -> new ScheduleNotFoundException(id));
+
+		// Load course entity
+		Course course = courseRepository.findByCode(dto.getCourseCode())
+				.orElseThrow(() -> new CourseNotFoundException(dto.getCourseCode()));
+
+		// Validations
+		if (dto.getStartDate().isAfter(dto.getEndDate())) {
+			throw new IllegalArgumentException("Start date cannot be after end date");
+		}
+		if (dto.getStartTime().isAfter(dto.getEndTime())) {
+			throw new IllegalArgumentException("Start time cannot be after end time");
+		}
+
+		// Update fields
+		schedule.setCourse(course);
+		schedule.setStartDate(dto.getStartDate());
+		schedule.setEndDate(dto.getEndDate());
+		schedule.setStartTime(dto.getStartTime());
+		schedule.setEndTime(dto.getEndTime());
+		Detail detail = new Detail(dto.getDescription(), dto.getVenue());
+		schedule.setDetail(detail);
+
+		try {
+			schedule.setType(ScheduleType.valueOf(dto.getType().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid schedule type: " + dto.getType());
+		}
+		try {
+			schedule.setStatus(ScheduleStatus.valueOf(dto.getStatus().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid status: " + dto.getStatus());
+		}
+		try {
+			schedule.setScope(Scope.valueOf(dto.getScope().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid scope: " + dto.getScope());
+		}
+
+		return scheduleRepository.save(schedule);
+	}
+
+	@CacheEvict(value = "schedules", allEntries = true)
+	public void deleteSchedule(int id) {
+		scheduleRepository.deleteById(id);
+	}
+
+	// Update schedule status
+	private void updateScheduleStatus(Schedule schedule, ScheduleStatus newStatus) {
+		schedule.setStatus(newStatus);
+		scheduleRepository.save(schedule);
+	}
+
+	// Update expired schedule's status and get current schedules
+	@Transactional(readOnly = true)
+	public List<Schedule> getCurrentSchedules() {
+		LocalDate today = LocalDate.now();
+		LocalTime now = LocalTime.now();
+		
+		// Get pending schedules
+		List<Schedule> pendingSchedules = entityManager.createQuery(
+			"SELECT s FROM Schedule s " 
+			+ "WHERE s.status = :pending",
+			Schedule.class)
+		.setParameter("pending", ScheduleStatus.PENDING)
+		.getResultList();
+
+		// Update status of expired schedules
+		for (Schedule schedule : pendingSchedules) {
+			LocalDateTime scheduleEndTime = schedule.getEndDate().atTime(schedule.getEndTime());
+			if (LocalDateTime.now().isAfter(scheduleEndTime)) {
+				updateScheduleStatus(schedule, ScheduleStatus.EXPIRED);
+			}
+		}
+
+		// Get current schedules
+		String jpql = """
+			SELECT s FROM Schedule s 
+			JOIN FETCH s.course
+			WHERE s.status = :pending
+			AND (
+					(s.startDate <= :today AND s.endDate = :today AND s.endTime >= :now)
+				OR
+					(s.startDate <= :today AND s.endDate > :today)
+				OR
+					(s.startDate > :today)
+			)
+		""";
+		// Current ongoing schedules AND single-day schedules with end date today
+		// Current ongoing schedules with end date after today
+		// Upcoming schedules
+		
+		List<Schedule> currentSchedules = entityManager.createQuery(jpql, Schedule.class)
+			.setParameter("pending", ScheduleStatus.PENDING)
+			.setParameter("today", today)
+			.setParameter("now", now)
+			.getResultList();
+
+		return currentSchedules;
+	}
+}

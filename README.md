@@ -86,7 +86,7 @@ http://localhost:8080
 Academic-Scheduler/
 ├── src/
 │   ├── main/
-│       ├── java/io/github/wcm/schedulemanager/
+│       ├── java/io/github/wcm/academicscheduler/
 │       │   ├── config/           # Configuration classes
 │       │   ├── controller/       # REST and MVC controllers
 │       │   ├── domain/           # Entity models
@@ -94,7 +94,7 @@ Academic-Scheduler/
 │       │   ├── exception/        # Custom exceptions
 │       │   ├── repository/       # JPA repositories
 │       │   ├── service/          # Business logic services
-│       │   └── ScheduleManagerApplication.java
+│       │   └── AcademicSchedulerApplication.java
 │       └── resources/
 │           ├── application.yml   # Application configuration
 │           ├── static/           # CSS and static resources
