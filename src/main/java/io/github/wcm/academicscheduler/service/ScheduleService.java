@@ -22,21 +22,21 @@ import io.github.wcm.academicscheduler.exception.ScheduleNotFoundException;
 import io.github.wcm.academicscheduler.repository.CourseRepository;
 import io.github.wcm.academicscheduler.repository.ScheduleRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 @Transactional
 public class ScheduleService {
-	@PersistenceContext
-	EntityManager entityManager;
+
+	private final EntityManager entityManager;
 
 	private final CourseRepository courseRepository;
 	private final ScheduleRepository scheduleRepository;
 
 	// Autowired constructor since only one constructor
-	public ScheduleService(CourseRepository courseRepository, ScheduleRepository scheduleRepository) {
+	public ScheduleService(CourseRepository courseRepository, ScheduleRepository scheduleRepository, EntityManager entityManager) {
 		this.courseRepository = courseRepository;
 		this.scheduleRepository = scheduleRepository;
+		this.entityManager = entityManager;
 	}
 
 	@Transactional(readOnly = true)

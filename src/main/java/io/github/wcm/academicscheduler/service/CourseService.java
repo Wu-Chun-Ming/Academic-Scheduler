@@ -17,22 +17,21 @@ import io.github.wcm.academicscheduler.dto.CourseRequestDto;
 import io.github.wcm.academicscheduler.exception.CourseNotFoundException;
 import io.github.wcm.academicscheduler.repository.CourseRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 @Transactional
 public class CourseService {
-	
-	@PersistenceContext
-	EntityManager entityManager;
+
+	private final EntityManager entityManager;
 
 	private final CourseRepository courseRepository;
 
 	@Autowired
 	private StudentService studentService;
 
-	public CourseService(CourseRepository courseRepository) {
+	public CourseService(CourseRepository courseRepository, EntityManager entityManager) {
 		this.courseRepository = courseRepository;
+		this.entityManager = entityManager;
 	}
 
 	@Transactional(readOnly = true)
