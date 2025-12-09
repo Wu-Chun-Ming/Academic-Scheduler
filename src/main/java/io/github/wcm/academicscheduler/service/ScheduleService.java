@@ -116,6 +116,9 @@ public class ScheduleService {
 
 	@CacheEvict(value = "schedules", allEntries = true)
 	public void deleteSchedule(int id) {
+		if (!scheduleRepository.existsById(id)) {
+			throw new ScheduleNotFoundException(id);
+		}
 		scheduleRepository.deleteById(id);
 	}
 

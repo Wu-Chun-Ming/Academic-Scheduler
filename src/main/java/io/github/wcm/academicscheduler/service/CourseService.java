@@ -86,6 +86,9 @@ public class CourseService {
 
 	@CacheEvict(value = "courses", allEntries = true)
 	public void deleteCourse(String code) {
+		if (!courseRepository.existsByCode(code)) {
+			throw new CourseNotFoundException(code);
+		}
 		courseRepository.deleteByCode(code);
 	}
 
