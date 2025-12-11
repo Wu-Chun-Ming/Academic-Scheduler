@@ -9,6 +9,7 @@
 - **Database**: MySQL 8
 - **ORM**: Spring Data JPA / Hibernate
 - **UI Framework**: Bootstrap 5 (Flatly theme)
+- **Testing**: JUnit 5, Testcontainers
 - **Additional Libraries**:
   - Lombok - Reduce boilerplate code
   - Spring Boot DevTools - Development utilities
@@ -84,22 +85,30 @@ http://localhost:8080
 
 ```
 Academic-Scheduler/
+├── gradle/                       # Gradle wrapper files
 ├── src/
 │   ├── main/
-│       ├── java/io/github/wcm/academicscheduler/
-│       │   ├── config/           # Configuration classes
-│       │   ├── controller/       # REST and MVC controllers
-│       │   ├── domain/           # Entity models
-│       │   ├── dto/              # Data Transfer Objects
-│       │   ├── exception/        # Custom exceptions
-│       │   ├── repository/       # JPA repositories
-│       │   ├── service/          # Business logic services
-│       │   └── AcademicSchedulerApplication.java
-│       └── resources/
-│           ├── application.yml   # Application configuration
-│           ├── static/           # CSS and static resources
-│           └── templates/        # Thymeleaf templates
+│   │   ├── java/io/github/wcm/academicscheduler/
+│   │   │   ├── config/           # Configuration classes
+│   │   │   ├── controller/       # REST and MVC controllers
+│   │   │   ├── domain/           # Entity models
+│   │   │   ├── dto/              # Data Transfer Objects
+│   │   │   ├── exception/        # Custom exceptions
+│   │   │   ├── repository/       # JPA repositories
+│   │   │   ├── service/          # Business logic services
+│   │   │   └── AcademicSchedulerApplication.java
+│   │   └── resources/
+│   │       ├── application.yml   # Application configuration
+│   │       ├── static/           # CSS and static resources
+│   │       └── templates/        # Thymeleaf templates
+│   └── test/
+│       └── java/io/github/wcm/academicscheduler/
+│           ├── repository/       # Repository tests
+│           ├── service/          # Service unit tests
+│           └── AcademicSchedulerApplicationTests.java
 ├── build.gradle                  # Gradle build configuration
+├── gradlew                       # Gradle wrapper (Unix)
+├── gradlew.bat                   # Gradle wrapper (Windows)
 └── gradlew / gradlew.bat         # Gradle wrapper scripts
 ```
 
