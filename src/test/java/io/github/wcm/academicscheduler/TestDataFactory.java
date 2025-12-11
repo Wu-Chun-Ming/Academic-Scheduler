@@ -56,8 +56,14 @@ public class TestDataFactory {
         List<Timeslot> practicals = new ArrayList<>();
         practicals.add(new Timeslot(DayOfWeek.FRIDAY, LocalTime.parse("09:00"), LocalTime.parse("12:00")));
 
-        Course course = sampleCourse();
-        course.setTimeslots(new CourseTimeslots(lectures, tutorials, practicals));
+        Course course = new Course(
+            "MNOPQRS",
+            "Course C",
+            1,
+            1,
+            ProgrammeType.FOUNDATION,
+            new CourseTimeslots(lectures, tutorials, practicals)
+        );
         
         return course;
     }
