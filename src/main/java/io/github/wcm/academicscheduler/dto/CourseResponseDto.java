@@ -30,24 +30,18 @@ public class CourseResponseDto {
 		this.year = course.getYear();
 		this.semester = course.getSemester();
 		this.programmeType = course.getProgrammeType().name();
+		this.lecture   = mapSlots(course.getTimeslots().getLecture());
+		this.tutorial  = mapSlots(course.getTimeslots().getTutorial());
+		this.practical = mapSlots(course.getTimeslots().getPractical());
+	}
 
-		List<Timeslot> lectureSlots = course.getTimeslots().getLecture();
+	private List<TimeslotDto> mapSlots(List<Timeslot> slots) {
 		// Provide a default empty timeslot if none exist
-		if (lectureSlots.isEmpty()) {
-			lectureSlots.add(new Timeslot());
+		if (slots == null || slots.isEmpty()) {
+			return List.of(new TimeslotDto());
 		}
-		this.lecture = lectureSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
-
-		List<Timeslot> tutorialSlots = course.getTimeslots().getTutorial();
-		if (tutorialSlots.isEmpty()) {
-			tutorialSlots.add(new Timeslot());
-		}
-		this.tutorial = tutorialSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
-
-		List<Timeslot> practicalSlots = course.getTimeslots().getPractical();
-		if (practicalSlots.isEmpty()) {
-			practicalSlots.add(new Timeslot());
-		}
-		this.practical = practicalSlots.stream().map(TimeslotDto::new).collect(Collectors.toCollection(ArrayList::new));
+		return slots.stream()
+				.map(TimeslotDto::new)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 }
