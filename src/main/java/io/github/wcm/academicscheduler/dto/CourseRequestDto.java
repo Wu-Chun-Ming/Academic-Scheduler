@@ -7,11 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class CourseRequestDto {
 	@NotEmpty(message = "Course code is required")
 	@Size(min = 7, max = 8, message = "Course code must be 7-8 characters")
@@ -35,4 +31,68 @@ public class CourseRequestDto {
 	private List<TimeslotDto> lecture;
 	private List<TimeslotDto> tutorial;
 	private List<TimeslotDto> practical;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getSemester() {
+		return semester;
+	}
+
+	public void setSemester(Integer semester) {
+		this.semester = semester;
+	}
+
+	public String getProgrammeType() {
+		return programmeType;
+	}
+
+	public void setProgrammeType(String programmeType) {
+		this.programmeType = programmeType;
+	}
+
+	public List<TimeslotDto> getLecture() {
+		return lecture;
+	}
+
+	public void setLecture(List<TimeslotDto> lecture) {
+		this.lecture = lecture;
+	}
+
+	public List<TimeslotDto> getTutorial() {
+		return tutorial;
+	}
+
+	public void setTutorial(List<TimeslotDto> tutorial) {
+		this.tutorial = tutorial;
+	}
+
+	public List<TimeslotDto> getPractical() {
+		return practical;
+	}
+
+	public void setPractical(List<TimeslotDto> practical) {
+		this.practical = practical;
+	}
 }

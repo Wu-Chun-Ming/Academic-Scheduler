@@ -8,13 +8,7 @@ import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.github.wcm.academicscheduler.domain.Schedule;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class ScheduleResponseDto {
 	private int id;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -30,6 +24,9 @@ public class ScheduleResponseDto {
 	private String status;
 	private String scope;
 	private String timeLeft;
+
+	public ScheduleResponseDto() {
+	}
 
 	public ScheduleResponseDto(Schedule schedule) {
 		this.id = schedule.getId();
@@ -64,5 +61,101 @@ public class ScheduleResponseDto {
 
 	public LocalTime getEndTime() {
 		return endDateTime.toLocalTime();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public DayOfWeek getDay() {
+		return day;
+	}
+
+	public void setDay(DayOfWeek day) {
+		this.day = day;
+	}
+
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getVenue() {
+		return venue;
+	}
+
+	public void setVenue(String venue) {
+		this.venue = venue;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public String getTimeLeft() {
+		return timeLeft;
+	}
+
+	public void setTimeLeft(String timeLeft) {
+		this.timeLeft = timeLeft;
 	}
 }
