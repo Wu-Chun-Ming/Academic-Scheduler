@@ -45,7 +45,7 @@ public class ScheduleServiceTest {
     private TypedQuery<Schedule> typedQuery;
 
     @InjectMocks
-    private ScheduleService scheduleService;
+    private ScheduleServiceImpl scheduleService;
 
     // Test data
     private Schedule mockSchedule;

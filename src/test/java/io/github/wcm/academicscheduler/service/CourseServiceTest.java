@@ -40,7 +40,7 @@ public class CourseServiceTest {
 	private TypedQuery<Course> typedQuery;
 
 	@InjectMocks
-	private CourseService courseService;
+	private CourseServiceImpl courseService;
 
     // Test data
     private Course mockCourse;
