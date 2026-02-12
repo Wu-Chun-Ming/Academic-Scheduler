@@ -9,18 +9,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.github.wcm.academicscheduler.domain.Course;
-import io.github.wcm.academicscheduler.domain.CourseTimeslots;
-import io.github.wcm.academicscheduler.domain.Detail;
-import io.github.wcm.academicscheduler.domain.Schedule;
-import io.github.wcm.academicscheduler.domain.Timeslot;
-import io.github.wcm.academicscheduler.domain.enums.ProgrammeType;
-import io.github.wcm.academicscheduler.domain.enums.ScheduleStatus;
-import io.github.wcm.academicscheduler.domain.enums.ScheduleType;
-import io.github.wcm.academicscheduler.domain.enums.Scope;
-import io.github.wcm.academicscheduler.dto.CourseRequestDto;
-import io.github.wcm.academicscheduler.dto.ScheduleRequestDto;
-import io.github.wcm.academicscheduler.dto.TimeslotDto;
+import io.github.wcm.academicscheduler.course.Course;
+import io.github.wcm.academicscheduler.course.api.CourseRequestDto;
+import io.github.wcm.academicscheduler.course.api.TimeslotDto;
+import io.github.wcm.academicscheduler.course.internal.CourseTimeslots;
+import io.github.wcm.academicscheduler.course.internal.Timeslot;
+import io.github.wcm.academicscheduler.schedule.Schedule;
+import io.github.wcm.academicscheduler.schedule.api.ScheduleRequestDto;
+import io.github.wcm.academicscheduler.schedule.api.ScheduleStatus;
+import io.github.wcm.academicscheduler.schedule.api.ScheduleType;
+import io.github.wcm.academicscheduler.schedule.api.Scope;
+import io.github.wcm.academicscheduler.schedule.internal.Detail;
+import io.github.wcm.academicscheduler.common.api.ProgrammeType;
 
 public class TestDataFactory {
 

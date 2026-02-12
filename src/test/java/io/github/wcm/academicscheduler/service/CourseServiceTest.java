@@ -20,10 +20,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.wcm.academicscheduler.TestDataFactory;
-import io.github.wcm.academicscheduler.domain.Course;
-import io.github.wcm.academicscheduler.dto.CourseRequestDto;
-import io.github.wcm.academicscheduler.exception.CourseNotFoundException;
-import io.github.wcm.academicscheduler.repository.CourseRepository;
+import io.github.wcm.academicscheduler.course.Course;
+import io.github.wcm.academicscheduler.course.CourseRepository;
+import io.github.wcm.academicscheduler.course.CourseServiceImpl;
+import io.github.wcm.academicscheduler.course.api.CourseRequestDto;
+import io.github.wcm.academicscheduler.course.exception.CourseNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 

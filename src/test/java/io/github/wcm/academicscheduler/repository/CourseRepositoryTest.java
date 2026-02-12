@@ -14,8 +14,9 @@ import org.testcontainers.DockerClientFactory;
 
 import io.github.wcm.academicscheduler.MySQLContainerTest;
 import io.github.wcm.academicscheduler.TestDataFactory;
-import io.github.wcm.academicscheduler.domain.Course;
-import io.github.wcm.academicscheduler.domain.enums.ProgrammeType;
+import io.github.wcm.academicscheduler.course.Course;
+import io.github.wcm.academicscheduler.course.CourseRepository;
+import io.github.wcm.academicscheduler.common.api.ProgrammeType;
 import jakarta.persistence.EntityManager;
 
 @DataJpaTest
