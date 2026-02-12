@@ -22,20 +22,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 //@Data
 @Entity
 @Table(name = "schedules")
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @DynamicUpdate
 public class Schedule {
 
@@ -68,8 +58,24 @@ public class Schedule {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	@Builder.Default
 	private Scope scope = Scope.OFFICIAL;
+
+	public Schedule() {
+	}
+
+	public Schedule(int id, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime,
+			Course course, ScheduleType type, Detail detail, ScheduleStatus status, Scope scope) {
+		this.id = id;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.course = course;
+		this.type = type;
+		this.detail = detail;
+		this.status = status;
+		this.scope = scope;
+	}
 
 	public Schedule(ScheduleRequestDto dto, Course course) {
 		this.course = course; // resolved from repository
@@ -97,6 +103,82 @@ public class Schedule {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid scope: " + dto.getScope());
         }
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	public ScheduleType getType() {
+		return type;
+	}
+
+	public void setType(ScheduleType type) {
+		this.type = type;
+	}
+
+	public Detail getDetail() {
+		return detail;
+	}
+
+	public void setDetail(Detail detail) {
+		this.detail = detail;
+	}
+
+	public ScheduleStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ScheduleStatus status) {
+		this.status = status;
+	}
+
+	public Scope getScope() {
+		return scope;
+	}
+
+	public void setScope(Scope scope) {
+		this.scope = scope;
 	}
 
 	// Calculate time left

@@ -6,13 +6,7 @@ import java.time.LocalTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.github.wcm.academicscheduler.dto.TimeslotDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Timeslot {
 	private DayOfWeek day;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
@@ -29,5 +23,38 @@ public class Timeslot {
 		}
 		this.start = dto.getStart();
 		this.end = dto.getEnd();
+	}
+
+	public Timeslot() {
+	}
+
+	public Timeslot(DayOfWeek day, LocalTime start, LocalTime end) {
+		this.day = day;
+		this.start = start;
+		this.end = end;
+	}
+
+	public DayOfWeek getDay() {
+		return day;
+	}
+
+	public void setDay(DayOfWeek day) {
+		this.day = day;
+	}
+
+	public LocalTime getStart() {
+		return start;
+	}
+
+	public void setStart(LocalTime start) {
+		this.start = start;
+	}
+
+	public LocalTime getEnd() {
+		return end;
+	}
+
+	public void setEnd(LocalTime end) {
+		this.end = end;
 	}
 }
